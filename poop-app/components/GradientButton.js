@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     overflow: 'hidden',
     width: '100%',
+    margin: 10,
   },
   gradient: {
     paddingVertical: 10,

@@ -7,7 +7,7 @@ const CustomTextInput = ({placeholder}) => {
       <TextInput
         style={styles.input}
         placeholder={placeholder}
-        placeholderTextColor="#808080" // Color gris para el placeholder
+        placeholderTextColor="#808080"
       />
     </View>
   );
@@ -15,18 +15,19 @@ const CustomTextInput = ({placeholder}) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#151723', // Color de fondo del rectángulo
-    borderRadius: 25, // Bordes redondeados
-    paddingHorizontal: 20, // Espacio interno
+    backgroundColor: '#151723',
+    borderRadius: 50,
+    paddingHorizontal: 20,
     justifyContent: 'center',
-    height: 50, // Altura del campo de texto
-    margin: 5,
-    borderWidth: 2, // Grosor del borde
-    borderColor: '#2E2942', // Color del borde
+    height: 50,
+    margin: 10,
+    borderWidth: 1,
+    borderColor: '#56516A',
+    width: '100%',
   },
   input: {
-    fontSize: 16, // Tamaño del texto
-    color: '#FFFFFF', // Color del texto
+    fontSize: 16,
+    color: '#FFFFFF',
   },
 });
 
