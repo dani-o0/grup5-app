@@ -38,7 +38,7 @@ export default function Login({ navigation }) {
             )}
             <GradientButton
                 title={isLogin ? "Login" : "Sign Up"}
-                onPress={() => alert(isLogin ? 'Login pressed' : 'Sign Up pressed')}
+                onPress={() => navigation.navigate('Home')}
                 isPrimary={true}
                 width="100%"
             />
