@@ -23,9 +23,25 @@ export default function Login({ navigation }) {
                     width="40%"
                 />
             </View>
-            <Input placeholder='Nombre de usuario/correo...'/>
-            <Input placeholder='Contraseña...'/>
-            <GradientButton title="Login" onPress={() => navigation.navigate('Home')} isPrimary={true} width='50%'/>
+            {isLogin ? (
+                <>
+                    <Input placeholder="Nombre de usuario/correo..." />
+                    <Input placeholder="Contraseña..." secureTextEntry={true} />
+                </>
+            ) : (
+                <>
+                    <Input placeholder="Nombre de usuario..." />
+                    <Input placeholder="Correo..." />
+                    <Input placeholder="Contraseña..." secureTextEntry={true} />
+                    <Input placeholder="Confirmar contraseña..." secureTextEntry={true} />
+                </>
+            )}
+            <GradientButton
+                title={isLogin ? "Login" : "Sign Up"}
+                onPress={() => alert(isLogin ? 'Login pressed' : 'Sign Up pressed')}
+                isPrimary={true}
+                width="100%"
+            />
         </View>
     </View>
     );
