@@ -5,7 +5,7 @@ import Menu from '../components/Menu'
 
 export default function Add() {
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <View style={{ flex: 1 }}>
             <Text>Bienvenido al Add</Text>
             <Menu/>
         </View>
