@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'; // O usa otro set de íconos como FontAwesome
 
-const Menu = ({ navigation }) => {
+const Menu = () => {
   return (
     <View style={styles.footerContainer}>
       <TouchableOpacity style={styles.button}
@@ -10,7 +10,7 @@ const Menu = ({ navigation }) => {
         <Icon name="home" size={24} color="#FFFFFF" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}
-      onPress={() => navigation.navigate('Search')}>
+      onPress={() =>navigation.navigate('Search')}>
         <Icon name="search" size={24} color="#FFFFFF" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}
