@@ -4,7 +4,10 @@ import GradientButton from '../components/GradientButton';
 import Input from '../components/CustomTextInput';
 
 export default function Login({ navigation }) {
-    const [isLogin, setIsLogin] = useState(true); // Estado para controlar la vista
+    const [isLogin, setIsLogin] = useState(true);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
 
     return (
     <View style={styles.container}>
@@ -25,14 +28,14 @@ export default function Login({ navigation }) {
             </View>
             {isLogin ? (
                 <>
-                    <Input placeholder="Nombre de usuario/correo..." />
-                    <Input placeholder="Contraseña..." secureTextEntry={true} />
+                    <Input placeholder="Nombre de usuario/correo..." value={username} onChangeText={setUsername}/>
+                    <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword}/>
                 </>
             ) : (
                 <>
-                    <Input placeholder="Nombre de usuario..." />
-                    <Input placeholder="Correo..." />
-                    <Input placeholder="Contraseña..." secureTextEntry={true} />
+                    <Input placeholder="Nombre de usuario..." value={username} onChangeText={setUsername}/>
+                    <Input placeholder="Correo..." value={email} onChangeText={setEmail}/>
+                    <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword}/>
                     <Input placeholder="Confirmar contraseña..." secureTextEntry={true} />
                 </>
             )}
