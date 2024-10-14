@@ -7,7 +7,7 @@ export default function Add() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text>Bienvenido al Add</Text>
-            <Menu/>
+            <Menu Active="Add"/>
         </View>
     );
 }

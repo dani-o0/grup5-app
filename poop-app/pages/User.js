@@ -7,7 +7,7 @@ export default function User() {
     return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text>Bienvenido al User</Text>
-            <Menu/>
+            <Menu Active="User"/>
         </View>
     );
 }
