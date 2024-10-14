@@ -34,22 +34,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Pone los botones en fila
     justifyContent: 'space-evenly', // Distribuye los botones uniformemente
     alignItems: 'center',
-    backgroundColor: '#2E2942', // Color de fondo del menú
+    backgroundColor: '#151723', // Color de fondo del menú
     borderRadius: 30, // Bordes redondeados
     padding: 10,
     position: 'absolute',
     bottom: 20, // Ubicación en el footer
     left: 20,
     right: 20,
-    borderColor: '#56516A',
-    borderWidth: 1,
   },
   button: {
-    backgroundColor: '#151723', // Fondo de los botones
+    backgroundColor: '#2E2942', // Fondo de los botones
     padding: 10, // Espacio interno del botón
     borderRadius: 20, // Bordes redondeados de los botones
-    borderColor: '#56516A',
-    borderWidth: 1,
   },
 });
 
