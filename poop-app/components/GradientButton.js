@@ -5,12 +5,15 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 const GradientButton = ({ title, onPress, isPrimary, width }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={[styles.button, { width }, !isPrimary && styles.borderButton,]}>
+    <TouchableOpacity 
+      onPress={onPress} 
+      style={[styles.button, { width }, !isPrimary && styles.borderButton]} // Aplica el ancho aquí
+    >
       <LinearGradient
         colors={isPrimary ? ['#43C4D2', '#0149FF'] : ['#151723', '#151723']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
-        style={[styles.gradient]}
+        style={styles.gradient}
       >
         <Text style={styles.buttonText}>{title}</Text>
       </LinearGradient>
@@ -22,7 +25,6 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 50,
     overflow: 'hidden',
-    width: '100%',
     margin: 10,
   },
   borderButton: {
