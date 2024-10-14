@@ -1,24 +1,28 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'; // O usa otro set de íconos como FontAwesome
+import { useNavigation } from '@react-navigation/native'; // Importa useNavigation
+
 
 const Menu = () => {
+  const navigation = useNavigation();
+
   return (
     <View style={styles.footerContainer}>
       <TouchableOpacity style={styles.button}
-      onPress={() => navigation.navigate('Home')}>
+        onPress={() => navigation.navigate('Home')}>
         <Icon name="home" size={24} color="#FFFFFF" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}
-      onPress={() =>navigation.navigate('Search')}>
+        onPress={() => navigation.navigate('Search')}>
         <Icon name="search" size={24} color="#FFFFFF" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}
-      onPress={() => navigation.navigate('Add')}>
+        onPress={() => navigation.navigate('Add')}>
         <Icon name="add" size={24} color="#FFFFFF" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.button}
-      onPress={() => navigation.navigate('User')}>
+        onPress={() => navigation.navigate('User')}>
         <Icon name="person" size={24} color="#FFFFFF" />
       </TouchableOpacity>
     </View>
