@@ -3,11 +3,11 @@ import { View, Image, StyleSheet } from 'react-native';
 
 const ImageDisplay = ({ source, width, height }) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container}> 
       <Image 
         source={source} 
-        style={{ width, height }}  // Aplica el ancho y altura como estilo
-        resizeMode="contain" 
+        style={{ width, height, borderRadius: 50, borderWidth: 1}}  
+        resizeMode="cover"  
       />
     </View>
   );
@@ -15,10 +15,9 @@ const ImageDisplay = ({ source, width, height }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderColor: '#56516A'
   },
 });
+
 
 export default ImageDisplay;
