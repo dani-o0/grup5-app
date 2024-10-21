@@ -3,10 +3,10 @@ import { View, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import Menu from '../components/Menu';
-import TabButton from '../components/TabButton';
+import Input from '../components/CustomTextInput'
 import GradientButton from '../components/GradientButton';
 
-export default function User() {
+export default function EditUser() {
     const navigation = useNavigation();
 
     return (
@@ -14,14 +14,21 @@ export default function User() {
             <View style={styles.tabView}>
                 <View style={styles.buttonView}>
                     <GradientButton
-                        title="Edit profile"
-                        onPress={() => navigation.navigate('EditUser')}
+                        title="Change profile picture"
+                        onPress={() => console.log("Change picture")}
+                        isPrimary={true}
+                        width="50%"
+                    />
+                    <Input placeholder="Nombre de usuario..."/>
+                    <Input placeholder="Contraseña..." secureTextEntry={true} secondary={true}/>
+                    <Input placeholder="Confirmar contraseña..." secureTextEntry={true} secondary={true} />
+                    <GradientButton
+                        title="Save changes"
+                        onPress={() => navigation.navigate('User')}
                         isPrimary={true}
                         width="40%"
                     />
                 </View>
-                <TabButton title='Mis publicaciones'  />
-                <TabButton title='Log out'  />
             </View>
             <Menu style={styles.menuView} currentSection={4}/>
         </View>
