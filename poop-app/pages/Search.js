@@ -1,13 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-import Menu from '../components/Menu'
+import Menu from '../components/Menu';
+import Publication from '../components/Publication';
 
 export default function Search() {
     return (
         <View style={styles.mainView}>
             <View style={styles.tabView}>
-                <Text>Bienvenido al Search</Text>
+                <Publication name="Manolo" rating={3}/>
             </View>
             <Menu style={styles.menuView} currentSection={2}/>
         </View>
