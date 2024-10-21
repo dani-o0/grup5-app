@@ -19,7 +19,7 @@ export default function EditUser() {
                         isPrimary={true}
                         width="50%"
                     />
-                    <Input placeholder="Nombre de usuario..."/>
+                    <Input placeholder="Nombre de usuario..." secondary={true}/>
                     <Input placeholder="Contraseña..." secureTextEntry={true} secondary={true}/>
                     <Input placeholder="Confirmar contraseña..." secureTextEntry={true} secondary={true} />
                     <GradientButton

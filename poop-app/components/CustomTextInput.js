@@ -3,7 +3,7 @@ import { StyleSheet, TextInput, View } from 'react-native';
 
 const CustomTextInput = ({placeholder, secondary}) => {
   return (
-    <View style={[styles.container, secondary ? backgroundColor='#151723' : backgroundColor='#2E2942']}>
+    <View style={[styles.container, { backgroundColor: secondary ? '#2E2942' : '#151723' }]}>
       <TextInput
         style={styles.input}
         placeholder={placeholder}
