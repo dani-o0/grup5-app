@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Image } from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons'; 
 
 const SearchInput = ({ placeholder }) => {
   const [inputText, setInputText] = useState(''); 
 
-  // Maneja el cambio de texto y actualiza el estado
   const handleTextChange = (text) => {
     setInputText(text);  
-
     const textoGuardado = text;  // Aquí se guarda el texto ingresado
   };
 
   return (
     <View style={styles.container}>
-      <Image 
-        source={require('../assets/lupa.png')} 
-        style={styles.icon}
-      />
+      <Icon name="search" size={24} color="#FFFFFF" style={styles.icon} /> 
       <TextInput
         style={styles.input}
         placeholder={placeholder || "Search..."}  // Placeholder personalizado
@@ -38,11 +34,9 @@ const styles = StyleSheet.create({
     width: '90%',                // Ancho del componente (ajústalo según sea necesario)
     borderWidth: 1,
     borderColor: '#56516A',      // Color del borde
+    alignItems: 'center',        // Alinea el icono verticalmente en el centro
   },
   icon: {
-    width: 20,   // Tamaño del ícono
-    height: 20,
-    tintColor: '#fff',  // Color del ícono
     marginRight: 10,    // Espacio entre el ícono y el TextInput
   },
   input: {
