@@ -14,7 +14,7 @@ export default function Card({route}) {
     const displayDate = creationDate.toDate().toLocaleDateString()
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#151723' }}>
+        <View style={styles.container}>
             <Image source={{uri: imageURL}} style={styles.image}/>
             <Text>{description}</Text>
             <Text>Creado el dia {displayDate}</Text>
@@ -25,14 +25,10 @@ export default function Card({route}) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'black',
-        borderRadius: 20,
-        width:'100%',
-        flex: 3,
-        alignItems: 'center',
+        flex: 1,
         justifyContent: 'center',
-        flexDirection: 'row',
-        marginVertical: 10, // para separación entre celdas
+        alignItems: 'center',
+        backgroundColor: '#151723'
     },
     imageContainer: {
         flex:1,
