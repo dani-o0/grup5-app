@@ -2,15 +2,14 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
 import Menu from '../components/Menu'
+import Map from '../components/Map';
 
 export default function Home() {
     return (
-        <View style={styles.mainView}>
-            <View style={styles.tabView}>
-                <Text>Bienvenido al Home</Text>
-            </View>
-            <Menu style={styles.menuView} currentSection = {1}/>
-        </View>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Map/>
+          <Menu Active="Home"/>
+      </View>
     );
 }
 
