@@ -6,9 +6,11 @@ import Map from '../components/Map';
 
 export default function Home() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Map/>
-          <Menu Active="Home"/>
+      <View style={styles.mainView}>
+        <View style={styles.tabView}>
+            <Map/>
+        </View>
+        <Menu style={styles.menuView} currentSection={1} />
       </View>
     );
 }
