@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
+import * as Location from 'expo-location';
 
 const locations = [
     {
@@ -54,16 +55,35 @@ const locations = [
   ];
 
 const Map = () => {
+  const [region, setRegion] = useState(null);
+
+  const getLocation = async () => {
+    // Solicita permisos
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+        console.log('Permiso de ubicación denegado');
+        return;
+    }
+
+    // Obtiene la ubicación actual
+    let location = await Location.getCurrentPositionAsync({});
+    setRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+    });
+};
+
+  useEffect(() => {
+    getLocation();
+}, []);
+
     return (
         <View style={{ flex: 1, width: '100%', height: '100%' }}>
           <MapView
             style={styles.map}
-            initialRegion={{
-              latitude: 40.4168,   // Latitud inicial para Madrid
-              longitude: -3.7038,   // Longitud inicial para Madrid
-              latitudeDelta: 5, // Zoom del mapa (Delta)
-              longitudeDelta: 5, // Zoom del mapa (Delta)
-            }}
+            initialRegion={region}
             provider={MapView.PROVIDER_GOOGLE}
           >
             {locations.map((location, index) => (
