@@ -1,51 +1,63 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'; // O usa otro set de íconos como FontAwesome
-import { useNavigation } from '@react-navigation/native'; // Importa useNavigation
+import { View, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import GradientButton from './GradientButton';
 
 
-const Menu = () => {
+const Menu = ({currentSection}) => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.footerContainer}>
-      <TouchableOpacity style={styles.button}
-        onPress={() => navigation.navigate('Home')}>
-        <Icon name="home" size={24} color="#FFFFFF" />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}
-        onPress={() => navigation.navigate('Search')}>
-        <Icon name="search" size={24} color="#FFFFFF" />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}
-        onPress={() => navigation.navigate('Add')}>
-        <Icon name="add" size={24} color="#FFFFFF" />
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.button}
-        onPress={() => navigation.navigate('User')}>
-        <Icon name="person" size={24} color="#FFFFFF" />
-      </TouchableOpacity>
+    <View style={styles.mainView}>
+      <View style={styles.menuView}>
+      <GradientButton
+            onPress={() => navigation.navigate("Home")}
+            isPrimary={currentSection == 1}
+            width="20%"
+            isIcon={true}
+            icon="home"
+        />
+        <GradientButton
+            onPress={() => navigation.navigate("Search")}
+            isPrimary={currentSection == 2}
+            width="20%"
+            isIcon={true}
+            icon="search"
+        />
+        <GradientButton
+            onPress={() => navigation.navigate("Add")}
+            isPrimary={currentSection == 3}
+            width="20%"
+            isIcon={true}
+            icon="add"
+        />
+        <GradientButton
+            onPress={() => navigation.navigate("User")}
+            isPrimary={currentSection == 4}
+            width="20%"
+            isIcon={true}
+            icon="person"
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  footerContainer: {
-    flexDirection: 'row', // Pone los botones en fila
-    justifyContent: 'space-evenly', // Distribuye los botones uniformemente
-    alignItems: 'center',
-    backgroundColor: '#151723', // Color de fondo del menú
-    borderRadius: 30, // Bordes redondeados
-    padding: 10,
-    position: 'absolute',
-    bottom: 20, // Ubicación en el footer
-    left: 20,
-    right: 20,
+  mainView:
+  {
+    justifyContent: 'center', 
+    alignItems: 'center' 
   },
-  button: {
-    backgroundColor: '#2E2942', // Fondo de los botones
-    padding: 10, // Espacio interno del botón
-    borderRadius: 20, // Bordes redondeados de los botones
+  menuView:
+  {
+    flexDirection: 'row', 
+    backgroundColor: '#2E2942', 
+    borderRadius: 30, 
+    padding: 10, 
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
 });
 

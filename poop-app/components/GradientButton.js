@@ -1,20 +1,21 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-const GradientButton = ({ title, onPress, isPrimary, width }) => {
+const GradientButton = ({ title, onPress, isPrimary, width, isIcon, icon }) => {
   return (
     <TouchableOpacity 
       onPress={onPress} 
-      style={[styles.button, { width }, !isPrimary && styles.borderButton]} // Aplica el ancho aquí
+      style={[styles.button, { width }, !isPrimary && styles.borderButton]}
     >
       <LinearGradient
         colors={isPrimary ? ['#43C4D2', '#0149FF'] : ['#151723', '#151723']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
-        style={styles.gradient}
+        style={[styles.gradient]}
       >
-        <Text style={styles.buttonText}>{title}</Text>
+        {isIcon ? <Icon name={icon} size={24} color="#FFFFFF"/> : <Text style={styles.buttonText}>{title}</Text>}
       </LinearGradient>
     </TouchableOpacity>
   );
