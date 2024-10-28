@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Search from './pages/Search';
 import Add from './pages/Add';
 import User from './pages/User';
+import Card from './pages/Card';
 
 
 const Stack = createNativeStackNavigator();
@@ -19,6 +20,7 @@ export default function App() {
         <Stack.Screen name="Search" component={Search} />
         <Stack.Screen name="Add" component={Add} />
         <Stack.Screen name="User" component={User} />
+        <Stack.Screen name="Card" component={Card} />
       </Stack.Navigator>
     </NavigationContainer>
   );
