@@ -3,12 +3,11 @@ import { View, StyleSheet, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import Menu from '../components/Menu';
-import TabButton from '../components/TabButton';
+import Input from '../components/CustomTextInput'
 import GradientButton from '../components/GradientButton';
-import PopUp from '../components/PopUp';
 import cat from '../assets/cat.jpg';
 
-export default function User() {
+export default function EditUser() {
     const navigation = useNavigation();
 
     return (
@@ -22,27 +21,40 @@ export default function User() {
                 </View>
                 <View style={styles.buttonView}>
                     <GradientButton
-                        title="Edit profile"
-                        onPress={() => navigation.navigate('EditUser')}
+                        title="Change profile picture"
+                        onPress={() => console.log("Change picture")}
+                        isPrimary={true}
+                        width="50%"
+                    />
+                    <Input placeholder="Nombre de usuario..." secondary={true}/>
+                    <Input placeholder="Contraseña..." secureTextEntry={true} secondary={true}/>
+                    <Input placeholder="Confirmar contraseña..." secureTextEntry={true} secondary={true} />
+                    <GradientButton
+                        title="Save changes"
+                        onPress={() => navigation.navigate('User')}
                         isPrimary={true}
                         width="40%"
                     />
                 </View>
-                <TabButton title='Mis publicaciones' />
-                <PopUp text="Log out" dialogText="¿Seguro que quieres cerrar sesión?" onAccept={() => navigation.navigate('Login')} tab={true} />
             </View>
-            <Menu style={styles.menuView} currentSection={4} />
+            <Menu style={styles.menuView} currentSection={4}/>
         </View>
     );
 }
 
+
 const styles = StyleSheet.create({
-    mainView: {
+    mainView:
+    {
         flex: 1,
         backgroundColor: '#151723',
     },
-    tabView: {
-        flex: 1,
+    tabView:
+    {
+        flex: 7,
+        width: '100%',
+        height: '50%',
+        justifyContent: 'center',
     },
     imageView: {
         alignItems: 'center',
@@ -55,17 +67,16 @@ const styles = StyleSheet.create({
         height: undefined,
         aspectRatio: 1,
         borderRadius: 50,
-        marginTop: 20,
-        marginBottom: 20,
         borderColor: '#56516A',
         borderWidth: 1,
     },
-    buttonView: {
-        alignItems: 'center',
+    buttonView:
+    {
+        alignItems: 'center', 
         justifyContent: 'center',
-        marginTop: -20, // Eleva los botones un poco más cerca de la imagen
     },
-    menuView: {
+    menuView:
+    {
         flex: 1,
     },
-});
+  });
