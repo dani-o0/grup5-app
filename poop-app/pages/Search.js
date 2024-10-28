@@ -6,6 +6,8 @@ import { db } from '../firebase'; // Importar la configuración de Firebase
 import Menu from '../components/Menu'
 import Location from '../components/Location'
 import { useNavigation } from '@react-navigation/native'; // Importa useNavigation
+import BarraSearch from '../components/BarraSearch';  // Sube un nivel y accede a "components"
+
 
 export default function Search() {
     const [data, setData] = useState([]);
@@ -57,7 +59,13 @@ export default function Search() {
     return (
         <View style={styles.mainView}>
             <View style={styles.tabView}>
-                <Text>Bienvenido al Search</Text>
+                <View style={styles.searchContainer}> 
+                    <BarraSearch 
+                    placeholder="Busca Cagadero..."
+                    onTextChange={(text) => setSearchText(text)}  // Actualiza el estado con el texto ingresado
+                    />
+                </View>
+
                 <FlatList style={{width: '90%'}}
                 data={data} // Pasamos el array de datos
                 renderItem={renderItem} // Función para renderizar cada ítem
@@ -99,5 +107,11 @@ const styles = StyleSheet.create({
     menuView:
     {
         flex: 1,
+    },
+    searchContainer: {
+      width: '90%',
+      marginBottom: 15,   // Añade margen inferior para separar la barra de búsqueda del resto
+      marginTop: 20,      // Añade margen superior
+      alignItems: 'center' 
     },
   });
