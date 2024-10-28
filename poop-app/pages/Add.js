@@ -8,11 +8,13 @@ import Rating from '../components/Rating';
 
 export default function Add() {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#151723' }}>
-          <Text>Bienvenido al Add</Text>
-          <AddImage placeholder={require('../assets/addImage1.jpg')}/>
-          <Rating/>
-          <Menu Active="Add"/>
+      <View style={styles.mainView}>
+        <View style={styles.tabView}>
+            <Text>Bienvenido al Add</Text>
+            <AddImage placeholder={require('../assets/addImage1.jpg')}/>
+            <Rating/>
+        </View>
+          <Menu style={styles.menuView} currentSection={3} />
       </View>
     );
 }
