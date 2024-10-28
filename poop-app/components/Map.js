@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Image, Button } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import * as Location from 'expo-location';
 
@@ -84,7 +84,7 @@ const Map = () => {
           <MapView
             style={styles.map}
             initialRegion={region}
-            provider={MapView.PROVIDER_GOOGLE}
+            onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
           >
             {locations.map((location, index) => (
               <Marker
@@ -106,6 +106,9 @@ const Map = () => {
               </Marker>
             ))}
           </MapView>
+            <View style={styles.buttonContainer}>
+                <Button title="Ir a mi ubicación" onPress={getLocation} />
+            </View>
         </View>
       );
     }
@@ -125,6 +128,16 @@ const Map = () => {
         width: 30, // Ajusta el ancho
         height: 50, // Ajusta la altura
     },
+    buttonContainer: {
+      position: 'absolute',
+      top: 20, // Espacio desde la parte superior
+      right: 20, // Espacio desde la derecha
+      zIndex: 1, // Asegúrate de que el botón esté encima del mapa
+      backgroundColor: 'white',
+      borderRadius: 5,
+      padding: 10,
+      elevation: 3, // Añade sombra en Android
+  },
 });
 
 export default Map;
