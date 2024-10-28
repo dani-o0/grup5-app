@@ -1,6 +1,5 @@
 import React from 'react';
 import { Image, View, StyleSheet, Text } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import StaticRating from './StaticRating';
 
 export default function Location({ name, imageURL, rating, onpress}) {

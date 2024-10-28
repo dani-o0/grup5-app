@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal } from 'react-native';
 import GradientButton from './GradientButton';
+import TabButton from './TabButton';
 
-const PopUp = ({ text, dialogText, width, onAccept }) => {
+const PopUp = ({ text, dialogText, width, onAccept, tab }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const openModal = () => {
@@ -18,10 +19,16 @@ const PopUp = ({ text, dialogText, width, onAccept }) => {
     onAccept();
   };
 
+  const buttonType = () => {
+    if (tab)
+      <TabButton title={text} onPress={openModal}/>
+    else
+      <GradientButton title={text} onPress={openModal} isPrimary={true} width={width} />
+  }
+
   return (
     <View>
-      <GradientButton title={text} onPress={openModal} isPrimary={true} width={width} />
-
+      {tab ? (<TabButton title={text} onPress={openModal}/>) : (<GradientButton title={text} onPress={openModal} isPrimary={true} width={width} />)}
       <Modal
         animationType="slide"
         transparent={true}
