@@ -6,7 +6,9 @@ import Menu from '../components/Menu';
 import TabButton from '../components/TabButton';
 import GradientButton from '../components/GradientButton';
 import PopUp from '../components/PopUp';
+import AddComent from '../components/AddComent';
 import cat from '../assets/cat.jpg';
+
 
 export default function User() {
     const navigation = useNavigation();
@@ -29,7 +31,10 @@ export default function User() {
                     />
                 </View>
                 <TabButton title='Mis publicaciones' />
+
                 <PopUp text="Log out" dialogText="¿Seguro que quieres cerrar sesión?" onAccept={() => navigation.navigate('Login')} tab={true} />
+                <AddComent text="Add Comentary" dialogText="Escribe tu comentario..." onAccept={(comment) => {console.log("Comentario ingresado:", comment);}}  tab={true} />
+
             </View>
             <Menu style={styles.menuView} currentSection={4} />
         </View>

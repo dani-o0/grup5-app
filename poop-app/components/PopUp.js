@@ -9,7 +9,7 @@ const PopUp = ({ text, dialogText, width, onAccept, tab }) => {
   const openModal = () => {
     setModalVisible(true);
   };
-
+  
   const closeModal = () => {
     setModalVisible(false);
   };
