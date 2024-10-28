@@ -1,10 +1,11 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import Menu from '../components/Menu';
 import Input from '../components/CustomTextInput'
 import GradientButton from '../components/GradientButton';
+import cat from '../assets/cat.jpg';
 
 export default function EditUser() {
     const navigation = useNavigation();
@@ -12,6 +13,12 @@ export default function EditUser() {
     return (
         <View style={styles.mainView}>
             <View style={styles.tabView}>
+                <View style={styles.imageView}>
+                    <Image
+                        source={cat}
+                        style={styles.image}
+                    />
+                </View>
                 <View style={styles.buttonView}>
                     <GradientButton
                         title="Change profile picture"
@@ -48,6 +55,20 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '50%',
         justifyContent: 'center',
+    },
+    imageView: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        marginVertical: 10, // Un poco de margen vertical para la imagen
+    },
+    image: {
+        width: '50%', // Reduce el ancho al 80%
+        height: undefined,
+        aspectRatio: 1,
+        borderRadius: 50,
+        borderColor: '#56516A',
+        borderWidth: 1,
     },
     buttonView:
     {
