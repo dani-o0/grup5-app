@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Search from './pages/Search';
 import Add from './pages/Add';
 import User from './pages/User';
+import Card from './pages/Card';
 import EditUser from './pages/EditUser';
 
 
@@ -21,6 +22,7 @@ export default function App() {
         <Stack.Screen name="Add" component={Add} options={{ headerShown: true ,  animation: 'none'}}/>
         <Stack.Screen name="User" component={User} options={{ headerShown: true ,  animation: 'none'}}/>
         <Stack.Screen name="EditUser" component={EditUser} options={{ headerShown: true ,  animation: 'none'}}/>
+        <Stack.Screen name="Card" component={Card} options={{ headerShown: true ,  animation: 'none'}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
