@@ -1,102 +1,82 @@
-import React from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
-import Menu from '../components/Menu';
-import LocationCard from '../components/LocationCard';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, FlatList} from 'react-native';
+import { collection, getDocs } from 'firebase/firestore'; // Importar Firestore y métodos
+import { db } from '../firebase'; // Importar la configuración de Firebase
 
-const locations = [
-  {
-    locationName: "Central Park",
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/testfirebase-f31d8.appspot.com/o/cat2.gif?alt=media&token=a1954560-4797-4bcc-acce-9ede0982e40d",
-    latitude: "40.785091",
-    longitude: "-73.968285"
-  },
-  {
-    locationName: "Eiffel Tower",
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/testfirebase-f31d8.appspot.com/o/cat3.gif?alt=media&token=246ab975-dc5e-4150-b1c1-5c352d40f382",
-    latitude: "48.858844",
-    longitude: "2.294351"
-  },
-  {
-    locationName: "Sydney Opera House",
-    imageUrl: "https://firebasestorage.googleapis.com/v0/b/testfirebase-f31d8.appspot.com/o/cat4.gif?alt=media&token=82f5561a-3a6c-4525-9c60-78c5e9edc6cf",
-    latitude: "-33.856784",
-    longitude: "151.215297"
-  },
-  {
-    locationName: "Great Wall of China",
-    imageUrl: "https://example.com/great_wall.jpg",
-    latitude: "40.431908",
-    longitude: "116.570374"
-  },
-  {
-    locationName: "Machu Picchu",
-    imageUrl: "https://example.com/machu_picchu.jpg",
-    latitude: "-13.163141",
-    longitude: "-72.544963"
-  },
-  {
-    locationName: "Statue of Liberty",
-    imageUrl: "https://example.com/statue_of_liberty.jpg",
-    latitude: "40.689247",
-    longitude: "-74.044502"
-  },
-  {
-    locationName: "Colosseum",
-    imageUrl: "https://example.com/colosseum.jpg",
-    latitude: "41.890251",
-    longitude: "12.492373"
-  },
-  {
-    locationName: "Christ the Redeemer",
-    imageUrl: "https://example.com/christ_redeemer.jpg",
-    latitude: "-22.951916",
-    longitude: "-43.210487"
-  },
-  {
-    locationName: "Taj Mahal",
-    imageUrl: "https://example.com/taj_mahal.jpg",
-    latitude: "27.175015",
-    longitude: "78.042155"
-  },
-  {
-    locationName: "Louvre Museum",
-    imageUrl: "https://example.com/louvre_museum.jpg",
-    latitude: "48.860611",
-    longitude: "2.337644"
-  }
-];
+import Menu from '../components/Menu'
+import Location from '../components/Location'
+import { useNavigation } from '@react-navigation/native'; // Importa useNavigation
 
 export default function Search() {
-  return (
-    <View style={styles.mainView}>
-        <View style={[{flex: 7}]}>
-            <ScrollView contentContainerStyle={styles.contentContainer}>
-                {locations.map((location, index) => (
-                <LocationCard
-                    key={index}
-                    locationName={location.locationName}
-                    imageUrl={location.imageUrl}
-                    latitude={location.latitude}
-                    longitude={location.longitude}
-                />
-                ))}
-            </ScrollView>
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const navigation = useNavigation();
+
+    const fetchData = async () => {
+        try {
+            const querySnapshot = await getDocs(collection(db, 'Lavabo')); // Asumiendo que tienes una colección 'questions'
+            const items = [];
+            querySnapshot.forEach((doc) => {
+                items.push({ id: doc.id, ...doc.data() }); // Extrae los datos y agrega el id
+            });
+            setData(items); // Almacena los datos en el estado
+            setLoading(false); // Detener el indicador de carga
+        } catch (error) {
+            console.error('Error obteniendo los datos de Firebase:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+        );  
+      }
+
+      const renderItem = ({ item }) => (
+        <Location
+            name={item.nombre}
+            imageURL={item.imagen}
+            rating={item.valoracion}
+            onpress={() => navigation.navigate('Card', { 
+                name: item.nombre, 
+                imageURL: item.imagen, 
+                rating: item.valoracion, 
+                description: item.descripcion,
+                author: item.autor,
+                location: item.localizacion,
+                creationDate: item.fechaCreacion
+            })}
+        />
+    );
+    return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text>Bienvenido al Search</Text>
+            <FlatList style={{width: '90%'}}
+            data={data} // Pasamos el array de datos
+            renderItem={renderItem} // Función para renderizar cada ítem
+            keyExtractor={item => item.id} // Para darle una key única a cada item
+            />
+            <Menu Active="Search"/>
         </View>
-        <View style={[{flex: 1}]}>
-            <Menu currentSection={2} />
-        </View>
-    </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
-  mainView: {
-    flexDirection: 'column',
-    flex: 1,
-    backgroundColor: '#151723',
-  },
-  contentContainer: {
-    paddingVertical: 10,
-    alignItems: 'center',
-  },
-});
+    container: {
+        flex: 1,
+        backgroundColor: '#f5f5f5',
+        paddingTop: 20,
+        paddingHorizontal: 10,
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+  });

@@ -12,7 +12,7 @@ const StaticRating = ({ rating }) => {
       {Array(fullStars).fill().map((_, index) => (
         <Icon key={`full-${index}`} name="star" size={30} color="#FFD700" />
       ))}
-s
+
       {halfStar && <Icon name="star-half" size={30} color="#FFD700" />}
 
       {Array(emptyStars).fill().map((_, index) => (
