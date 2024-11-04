@@ -14,21 +14,34 @@ export default function Card({route}) {
     const displayDate = creationDate.toDate().toLocaleDateString()
 
     return (
-        <View style={styles.container}>
+        <View style={styles.mainView}>
+        <View style={styles.tabView}>
             <Image source={{uri: imageURL}} style={styles.image}/>
-            <Text>{description}</Text>
-            <Text>Creado el dia {displayDate}</Text>
-            <Menu Active="Search"/>
+            <Text style={{color: 'white'}}>{description}</Text>
+            <Text style={{color: 'white'}}>Creado el dia {displayDate}</Text>
         </View>
+        <Menu style={styles.menuView} currentSection={2} />
+      </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
+    mainView:
+    {
         flex: 1,
+        backgroundColor: '#151723',
+    },
+    tabView:
+    {
+        flex: 7,
+        width: '100%',
+        height: '50%',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#151723'
+    },
+    menuView:
+    {
+        flex: 1,
     },
     imageContainer: {
         flex:1,

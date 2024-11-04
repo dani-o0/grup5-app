@@ -18,6 +18,7 @@ export default function App() {
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false ,  animation: 'none'}}/>
         <Stack.Screen name="Home" component={Home} options={{ headerShown: true ,  animation: 'none'}}/>
+        <Stack.Screen name="Map" component={Map} options={{ headerShown: false ,  animation: 'none'}}/>
         <Stack.Screen name="Search" component={Search} options={{ headerShown: true ,  animation: 'none'}}/>
         <Stack.Screen name="Add" component={Add} options={{ headerShown: true ,  animation: 'none'}}/>
         <Stack.Screen name="User" component={User} options={{ headerShown: true ,  animation: 'none'}}/>

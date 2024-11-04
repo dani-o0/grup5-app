@@ -75,22 +75,21 @@ if (loading) {
                           longitude: location.localizacion.longitude,
                         }}
                       >
-                        <Callout tooltip>
+                        <Callout tooltip onPress={() =>
+                          navigation.navigate('Card', {
+                            name: location.nombre,
+                            imageURL: location.imagen,
+                            rating: location.valoracion,
+                            description: location.descripcion,
+                            author: location.autor,
+                            location: location.localizacion,
+                            creationDate: location.fechaCreacion,
+                          })
+                        }>
                           <LocationPopUp
                             name={location.nombre}
                             image={location.imagen}
                             rating={location.valoracion}
-                            onpress={() =>
-                              navigation.navigate('Card', {
-                                name: location.nombre,
-                                imageURL: location.imagen,
-                                rating: location.valoracion,
-                                description: location.descripcion,
-                                author: location.autor,
-                                location: location.localizacion,
-                                creationDate: location.fechaCreacion,
-                              })
-                            }
                           />
                         </Callout>
                       </Marker>

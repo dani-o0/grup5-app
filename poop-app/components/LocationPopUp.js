@@ -1,53 +1,55 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import StaticRating from './StaticRating'; // Asegúrate de importar tu componente de estrellas
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import StaticRating from './StaticRating';
 
-const LocationPopUp = ({ name, image, rating, onpress}) => {
+const LocationPopUp = ({ name, image, rating}) => {
   return (
-    <TouchableOpacity style={styles.calloutContainer} onPress={onpress}>
-      <Image source={{ uri: image }} style={styles.image} />
-    
-
-      <Text style={styles.placeName}>{name}</Text>
-
-      <StaticRating rating={rating} />
-      
+    <TouchableOpacity style={styles.container}>
+      <View style={styles.popUpContent}>
+        <Image source={{ uri: image }} style={styles.image} />
+        <Text style={styles.name}>{name}</Text>
+        <StaticRating rating={rating} />
+      </View>
       <View style={styles.triangle} />
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  calloutContainer: {
-    width: 150,
-    backgroundColor: '#2b2546',
-    borderRadius: 10,
-    padding: 10,
+  container: {
+    width: '100%',
+    height: '100%',
     alignItems: 'center',
+    backgroundColor: 'transparent', // Fondo transparente para el triángulo
+  },
+  popUpContent: {
+    alignItems: 'center',
+    backgroundColor: '#2C2C54',
+    borderRadius: 10,
+    paddingBottom: 10,
   },
   image: {
-    width: 80,
-    height: 80,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
+    width: 100,
+    height: 100,
+    borderRadius: 10,
   },
-  placeName: {
-    color: '#ffffff',
-    fontSize: 14,
+  name: {
+    color: 'white',
+    fontSize: 20,
     fontWeight: 'bold',
-    marginVertical: 5,
+    textAlign: 'center',
   },
   triangle: {
     width: 0,
     height: 0,
-    borderLeftWidth: 10,
-    borderRightWidth: 10,
-    borderTopWidth: 10,
+    borderLeftWidth: 70,
+    borderRightWidth: 70,
+    borderBottomWidth: 20,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
-    borderTopColor: '#2b2546',
-    alignSelf: 'center',
-    marginTop: 5,
+    borderBottomColor: '#2C2C54',
+    transform: [{ rotate: '180deg' }],
+    marginTop: -1, // Ajuste para conectar con el popup
   },
 });
 
