@@ -24,7 +24,7 @@ export default function Search() {
             console.error('Error obteniendo los datos de Firebase:', error);
         }
     };
-
+}
 
 export default function Search() {
 // Definir el estado para almacenar el texto
