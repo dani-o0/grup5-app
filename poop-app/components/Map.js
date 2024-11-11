@@ -4,7 +4,7 @@ import MapView, { Marker, Callout } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 import * as ActualLocation from 'expo-location';
 import { collection, getDocs } from 'firebase/firestore'; // Importar Firestore y métodos
-import { db } from '../firebase'; // Importar la configuración de Firebase
+import { FIREBASE_STORAGE } from '../firebaseConfig'; // Importar la configuración de Firebase
 import LocationPopUp from './LocationPopUp';
 
 
@@ -16,7 +16,7 @@ const Map = () => {
 
   const fetchLocations = async () => {
     try {
-        const querySnapshot = await getDocs(collection(db, 'Lavabo')); // Asumiendo que tienes una colección 'questions'
+        const querySnapshot = await getDocs(collection(FIREBASE_STORAGE, 'Lavabo')); // Asumiendo que tienes una colección 'questions'
         const items = [];
         querySnapshot.forEach((doc) => {
             items.push({ id: doc.id, ...doc.data() }); // Extrae los datos y agrega el id
