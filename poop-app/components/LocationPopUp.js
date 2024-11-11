@@ -8,7 +8,7 @@ const LocationPopUp = ({ name, image, rating}) => {
       <View style={styles.popUpContent}>
         <Image source={{ uri: image }} style={styles.image} />
         <Text style={styles.name}>{name}</Text>
-        <StaticRating rating={rating} />
+        <StaticRating style={styles.rating} rating={rating} />
       </View>
       <View style={styles.triangle} />
     </TouchableOpacity>
@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  rating: {
+    marginHorizontal: 10,
   },
   triangle: {
     width: 0,
