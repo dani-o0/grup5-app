@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { View, ImageBackground, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
+import { View, ImageBackground, StyleSheet, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'; // Para el icono "+"
 import * as ImagePicker from 'expo-image-picker';
 import * as MediaLibrary from 'expo-media-library';
 
-const { width } = Dimensions.get('window');
-
-const AddImage = ({ placeholder }) => {
+const AddImage = ({placeholder}) => {
   const [selectedImage, setSelectedImage] = useState(placeholder);
   const [status, requestPermission] = MediaLibrary.usePermissions();
 
@@ -21,47 +19,49 @@ const AddImage = ({ placeholder }) => {
     });
 
     if (!result.canceled) {
-      setSelectedImage({ uri: result.assets[0].uri });
+      setSelectedImage({uri: result.assets[0].uri});
     } else {
       alert('You did not select any image.');
     }
   };
 
-  return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={selectedImage}
-        style={styles.image}
-        imageStyle={{ borderRadius: 10 }}
-      >
-        <TouchableOpacity style={styles.plusButton} onPress={pickImageAsync}>
-          <Icon name="add" size={width * 0.1} color="white" />
-        </TouchableOpacity>
-      </ImageBackground>
-    </View>
-  );
-};
 
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
-    width: width * 0.7, // 70% del ancho de la pantalla
-    height: width * 0.5, // 50% del ancho de la pantalla
-    justifyContent: 'center',
-    alignItems: 'center',
-    opacity: 0.7,
-  },
-  plusButton: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    width: width * 0.15, // 15% del ancho de la pantalla para el botón
-    height: width * 0.15,
-    borderRadius: (width * 0.15) / 2,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+    return (
+        <View style={styles.container}>
+          <ImageBackground
+            source={selectedImage} // Aquí puedes colocar tu imagen o usar require() si está local.
+            style={styles.image}
+            imageStyle={{ borderRadius: 10 }} // Bordes redondeados
+          >
+            <TouchableOpacity style={styles.plusButton}
+            onPress={pickImageAsync}>
+              <Icon name="add" size={40} color="white" />
+            </TouchableOpacity>
+          </ImageBackground>
+        </View>
+      );
+    };
+    
+    const styles = StyleSheet.create({
+      container: {
+        justifyContent: 'center',
+        alignItems: 'center', // Color de fondo oscuro
+      },
+      image: {
+        width: 250, // Ajusta el tamaño de la imagen
+        height: 200, // Ajusta el tamaño de la imagen
+        justifyContent: 'center',
+        alignItems: 'center',
+        opacity: 0.7,
+      },
+      plusButton: {
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Fondo semitransparente para el botón
+        width: 60,
+        height: 60,
+        borderRadius: 30, // Hace el botón circular
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
 });
 
 export default AddImage;

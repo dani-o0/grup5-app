@@ -1,4 +1,4 @@
-import { React, useState} from 'react';
+import React from 'react';
 import { View, StyleSheet, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -6,22 +6,9 @@ import Menu from '../components/Menu';
 import Input from '../components/CustomTextInput'
 import GradientButton from '../components/GradientButton';
 import cat from '../assets/cat.jpg';
-import { FIREBASE_AUTH, FIREBASE_STORAGE } from '../firebaseConfig';
-import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 
 export default function EditUser() {
     const navigation = useNavigation();
-    const [displayName, setDisplayName] = useState('');
-
-    const updateProfile = async (uid, newProfileData) => {
-        try {
-            const userRef = doc(FIREBASE_STORAGE, 'Users', uid);
-            await updateDoc(userRef, newProfileData);
-            console.log('Informacion del usuario actualizada en Firestore: ', uid);
-        } catch (error) {
-            console.error('Error al actualizar la informacion del usuario en Firestore: ', error.message);
-        }
-    }
 
     return (
         <View style={styles.mainView}>
@@ -39,14 +26,12 @@ export default function EditUser() {
                         isPrimary={true}
                         width="50%"
                     />
-                    <Input placeholder="Nombre de usuario..." value={displayName} onChangeText={setDisplayName} secondary={true}/>
+                    <Input placeholder="Nombre de usuario..." secondary={true}/>
                     <Input placeholder="Contraseña..." secureTextEntry={true} secondary={true}/>
                     <Input placeholder="Confirmar contraseña..." secureTextEntry={true} secondary={true} />
                     <GradientButton
                         title="Save changes"
-                        onPress={() => updateProfile(FIREBASE_AUTH.currentUser.uid, {
-                            username: displayName,
-                        })}
+                        onPress={() => navigation.navigate('User')}
                         isPrimary={true}
                         width="40%"
                     />
