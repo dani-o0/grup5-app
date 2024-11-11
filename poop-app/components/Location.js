@@ -20,7 +20,7 @@ export default function Location({ name, imageURL, rating, onpress}) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#2E2942',
+        backgroundColor: 'black',
         borderRadius: 20,
         width:'100%',
         flex: 3,
@@ -28,15 +28,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         marginVertical: 10, // para separación entre celdas
-        borderColor: '#56516A',
-        borderWidth: 1
     },
     imageContainer: {
         flex:1,
         width:'20%',
         alignItems: 'center',
         justifyContent: 'center',
-    
     },
     image: {
         width: 100,
