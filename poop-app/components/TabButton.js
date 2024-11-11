@@ -15,13 +15,13 @@ const TabButton = ({ title, onPress, width }) => {
 const styles = StyleSheet.create({
   button: {
     backgroundColor: '#2E2942',
-    borderRadius: 15,
-    width: '100%',
+    borderRadius: 20,
+    height: '7%',
     margin: 10,
     borderWidth: 1,
     borderColor: '#56516A',
     paddingHorizontal: 20,
-    paddingVertical: 15,
+    paddingVertical: 15
   },
   buttonText: {
     color: '#FFF',

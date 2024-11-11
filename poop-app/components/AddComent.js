@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal } from 'react-native';
 import GradientButton from './GradientButton';
+import CustomDescriptionInput from './CommentDescriptionInput';
 
-const PopUp = ({ text, dialogText, width, onAccept }) => {
+
+
+const AddComent = ({ text, dialogText, width, textImputColor, textImputMinimunHeight}) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [commentText, setCommentText] = useState(''); // Estado para el texto del comentario
 
   const openModal = () => {
     setModalVisible(true);
@@ -14,8 +18,23 @@ const PopUp = ({ text, dialogText, width, onAccept }) => {
   };
 
   const handleAccept = () => {
+    // Guarda la fecha y el usuario que creó el comentario
+    const date = new Date().toLocaleDateString(); 
+    const user = "UsuarioEjemplo"; // Aquí iría el usuario actual, en este caso es un texto simulado
     closeModal();
-    onAccept();
+    
+    // Almacenar las variables para usarlas después
+    const commentData = {
+      text: commentText,
+      date,
+      user,
+    };
+    
+    console.log("Comentario guardado:", commentData); // Imprime para verificar que se guardó
+
+    // Llama a la función de aceptación y cierra el modal
+    closeModal();
+
   };
 
   return (
@@ -30,7 +49,8 @@ const PopUp = ({ text, dialogText, width, onAccept }) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalView}>
-            <Text style={styles.modalText}>{dialogText}</Text>
+            <CustomDescriptionInput placeholder= {dialogText} color= {textImputColor} initialHeight= {textImputMinimunHeight} onChangeText={setCommentText}/>
+
             
             <View style={styles.buttonContainer}>
               <GradientButton title="Aceptar" onPress={handleAccept} isPrimary={true} width="40%" />
@@ -67,12 +87,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#56516A',
   },
-  modalText: {
-    fontSize: 16,
-    marginBottom: 15,
-    textAlign: 'center',
-    color: 'white',
-  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -81,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PopUp;
+export default AddComent;
