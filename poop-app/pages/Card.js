@@ -16,9 +16,9 @@ export default function Card({route}) {
       
     const renderItem = ({ item }) => (
       <View style={styles.commentContainer}>
-        <Text style={styles.author}>{item.author}</Text>
-        <Text style={styles.message}>{item.message}</Text>
-        <Text style={styles.date}>Creado el día {new Date(item.creationDate2).toLocaleDateString()}</Text>
+        <Text style={styles.author}>{item.autor}</Text>
+        <Text style={styles.message}>{item.mensaje}</Text>
+        <Text style={styles.date}>Creado el día {item.fechaCreacion?.toDate ? item.fechaCreacion.toDate().toLocaleDateString() : new Date(item.fechaCreacion).toLocaleDateString()}</Text>
       </View>
     );
     console.log('Comentarios:', comments);
@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
         width:'80%',
         backgroundColor: '#56516A',
         borderRadius: 20,
+        marginBottom: 10
     },
     text1: {
         color: 'white',
@@ -108,10 +109,12 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingHorizontal: 10,
         width: '100%',
+        marginTop: 10
     },
     commentContainer: {
         backgroundColor: '#56516A',
-        padding: 20,
+        padding: 10,
+        paddingHorizontal: 50,
         marginBottom: 10,
         borderRadius: 10,
     },
