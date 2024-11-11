@@ -7,6 +7,7 @@ import TabButton from '../components/TabButton';
 import GradientButton from '../components/GradientButton';
 import PopUp from '../components/PopUp';
 import cat from '../assets/cat.jpg';
+import { FIREBASE_AUTH } from '../firebaseConfig';
 
 export default function User() {
     const navigation = useNavigation();
@@ -29,7 +30,7 @@ export default function User() {
                     />
                 </View>
                 <TabButton title='Mis publicaciones' />
-                <PopUp text="Log out" dialogText="¿Seguro que quieres cerrar sesión?" onAccept={() => navigation.navigate('Login')} tab={true} />
+                <PopUp text="Log out" dialogText="¿Seguro que quieres cerrar sesión?" onAccept={() => FIREBASE_AUTH.signOut()} tab={true} />
             </View>
             <Menu style={styles.menuView} currentSection={4} />
         </View>

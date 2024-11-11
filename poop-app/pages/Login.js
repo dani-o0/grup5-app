@@ -1,14 +1,74 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image  } from 'react-native';
+import { View, StyleSheet, Image, Text  } from 'react-native';
 import GradientButton from '../components/GradientButton';
 import Input from '../components/CustomTextInput';
 import logo from '../assets/LogoLetrasB.png';
+import { FIREBASE_AUTH } from '../firebaseConfig';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { ActivityIndicator } from 'react-native-web';
+
 
 export default function Login({ navigation }) {
     const [isLogin, setIsLogin] = useState(true);
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const auth = FIREBASE_AUTH;
+
+    const signIn = async () => {
+        const cleanEmail = email.trim();
+        const cleanPassword = password.trim();
+        try {
+            const response = await signInWithEmailAndPassword(auth, cleanEmail, cleanPassword);
+            console.log(response);
+        } catch (error) {
+            switch (error.code) {
+                case 'auth/invalid-email':
+                    console.error('El correo electrónico no es válido.');
+                    break;
+                case 'auth/user-disabled':
+                    console.error('La cuenta ha sido deshabilitada.');
+                    break;
+                case 'auth/user-not-found':
+                    console.error('No se encontró un usuario con este correo electrónico.');
+                    break;
+                case 'auth/wrong-password':
+                    console.error('La contraseña es incorrecta.');
+                    break;
+                default:
+                    console.error('Error desconocido durante el inicio de sesión:', error.message);
+                    break;
+            }
+        }
+    }
+
+    const signUp = async () => {
+        const cleanEmail = email.trim();
+        const cleanPassword = password.trim();
+        try {
+            const response = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPassword);
+            console.log(response);
+            alert('Mira tu email para completar el registro.');
+        } catch (error) {
+            switch (error.code) {
+                case 'auth/invalid-email':
+                    alert('El correo electrónico no es válido.');
+                    console.error('El correo electrónico no es válido.');
+                    break;
+                case 'auth/email-already-in-use':
+                    alert('Este correo electrónico ya está en uso.');
+                    console.error('Este correo electrónico ya está en uso.');
+                    break;
+                case 'auth/weak-password':
+                    alert('La contraseña es demasiado débil.');
+                    alert('La contraseña es demasiado débil.');
+                    break;
+                default:
+                    alert('Error desconocido durante el registro:', error.message);
+                    console.error('Error desconocido durante el registro:', error.message);
+                    break;
+            }
+        }
+    }
 
     return (
     <View style={styles.container}>
@@ -36,23 +96,28 @@ export default function Login({ navigation }) {
             </View>
             {isLogin ? (
                 <>
-                    <Input placeholder="Nombre de usuario/correo..." value={username} onChangeText={setUsername}/>
+                    <Input placeholder="Correo electronico..." value={email} onChangeText={setEmail}/>
                     <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword}/>
+                    <GradientButton
+                        title={"Login"}
+                        onPress={signIn}
+                        isPrimary={true}
+                        width="100%"
+                    />
                 </>
             ) : (
                 <>
-                    <Input placeholder="Nombre de usuario..." value={username} onChangeText={setUsername}/>
                     <Input placeholder="Correo..." value={email} onChangeText={setEmail}/>
                     <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword}/>
                     <Input placeholder="Confirmar contraseña..." secureTextEntry={true} />
+                    <GradientButton
+                        title={"Sign Up"}
+                        onPress={signUp}
+                        isPrimary={true}
+                        width="100%"
+                    />
                 </>
             )}
-            <GradientButton
-                title={isLogin ? "Login" : "Sign Up"}
-                onPress={() => navigation.navigate('Home')}
-                isPrimary={true}
-                width="100%"
-            />
         </View>
     </View>
     );
