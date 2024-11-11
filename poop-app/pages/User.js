@@ -7,7 +7,7 @@ import TabButton from '../components/TabButton';
 import GradientButton from '../components/GradientButton';
 import PopUp from '../components/PopUp';
 import cat from '../assets/cat.jpg';
-import { FIREBASE_AUTH } from '../firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_STORAGE } from '../firebaseConfig';
 
 export default function User() {
     const navigation = useNavigation();
