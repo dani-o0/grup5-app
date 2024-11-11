@@ -1,72 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, StyleSheet, Image, Button } from 'react-native';
+import { Text, View, TouchableOpacity, StyleSheet, Image, Button, ActivityIndicator } from 'react-native';
 import MapView, { Marker, Callout } from 'react-native-maps';
-import * as Location from 'expo-location';
+import { useNavigation } from '@react-navigation/native';
+import * as ActualLocation from 'expo-location';
+import { collection, getDocs } from 'firebase/firestore'; // Importar Firestore y métodos
+import { db } from '../firebase'; // Importar la configuración de Firebase
+import LocationPopUp from './LocationPopUp';
 
-const locations = [
-    {
-      title: "Madrid",
-      description: "Capital de España",
-      coordinate: {
-        latitude: 40.4168, 
-        longitude: -3.7038,
-      },
-    },
-    {
-      title: "Barcelona",
-      description: "Ciudad conocida por su arquitectura",
-      coordinate: {
-        latitude: 41.3851, 
-        longitude: 2.1734,
-      },
-    },
-    {
-      title: "Valencia",
-      description: "Famosa por la paella",
-      coordinate: {
-        latitude: 39.4699, 
-        longitude: -0.3763,
-      },
-    },
-    {
-      title: "Sevilla",
-      description: "Conocida por su cultura flamenca",
-      coordinate: {
-        latitude: 37.3886,
-        longitude: -5.9823,
-      },
-    },
-    {
-      title: "Bilbao",
-      description: "Famosa por el Museo Guggenheim",
-      coordinate: {
-        latitude: 43.2630,
-        longitude: -2.9340,
-      },
-    },
-    {
-      title: "Santiago de Compostela",
-      description: "Destino de peregrinación",
-      coordinate: {
-        latitude: 42.8782,
-        longitude: -8.5446,
-      },
-    },
-  ];
 
 const Map = () => {
+  const navigation = useNavigation();
+  const [locations, setLocations] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [region, setRegion] = useState(null);
 
-  const getLocation = async () => {
+  const fetchLocations = async () => {
+    try {
+        const querySnapshot = await getDocs(collection(db, 'Lavabo')); // Asumiendo que tienes una colección 'questions'
+        const items = [];
+        querySnapshot.forEach((doc) => {
+            items.push({ id: doc.id, ...doc.data() }); // Extrae los datos y agrega el id
+        });
+        setLocations(items); // Almacena los datos en el estado
+        setLoading(false); // Detener el indicador de carga
+    } catch (error) {
+        console.error('Error obteniendo los datos de Firebase:', error);
+    }
+};
+
+  const getActualLocation = async () => {
     // Solicita permisos
-    let { status } = await Location.requestForegroundPermissionsAsync();
+    let { status } = await ActualLocation.requestForegroundPermissionsAsync();
     if (status !== 'granted') {
         console.log('Permiso de ubicación denegado');
         return;
     }
 
     // Obtiene la ubicación actual
-    let location = await Location.getCurrentPositionAsync({});
+    let location = await ActualLocation.getCurrentPositionAsync({});
     setRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
@@ -76,38 +47,60 @@ const Map = () => {
 };
 
   useEffect(() => {
-    getLocation();
+    fetchLocations();
+    getActualLocation();
 }, []);
+
+if (loading) {
+  return (
+      <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+  );  
+}
 
     return (
         <View style={{ flex: 1, width: '100%', height: '100%' }}>
-          <MapView
-            style={styles.map}
-            initialRegion={region}
-            onRegionChangeComplete={(newRegion) => setRegion(newRegion)}
-          >
-            {locations.map((location, index) => (
-              <Marker
-                key={index} // Asignar una key única para cada marcador
-                coordinate={location.coordinate}
-                anchor={{ x: 0.5, y: 1 }} // Ajusta el ancla para centrar el marcador
+          {region ? (
+                <MapView
+                  style={styles.map}
+                  region={region}
+                  onRegionChangeComplete={(newRegion) => setRegion(newRegion)} // Actualiza la región en cambios
                 >
-                <Image
-                        source={{ uri: 'https://play-lh.googleusercontent.com/5WifOWRs00-sCNxCvFNJ22d4xg_NQkAODjmOKuCQqe57SjmDw8S6VOSLkqo6fs4zqis' }}
-                        style={styles.markerImage}
-                    />
-              
-                <Callout>
-                  <View>
-                    <Text>{location.title}</Text>
-                    <Text>{location.description}</Text>
-                  </View>
-                </Callout>
-              </Marker>
-            ))}
-          </MapView>
+                  {locations.map((location) => (
+                      <Marker
+                        key={location.id}
+                        coordinate={{
+                          latitude: location.localizacion.latitude,
+                          longitude: location.localizacion.longitude,
+                        }}
+                      >
+                        <Callout tooltip onPress={() =>
+                          navigation.navigate('Card', {
+                            name: location.nombre,
+                            imageURL: location.imagen,
+                            rating: location.valoracion,
+                            description: location.descripcion,
+                            author: location.autor,
+                            location: location.localizacion,
+                            creationDate: location.fechaCreacion,
+                            comments: location.comentarios
+                          })
+                        }>
+                          <LocationPopUp
+                            name={location.nombre}
+                            image={location.imagen}
+                            rating={location.valoracion}
+                          />
+                        </Callout>
+                      </Marker>
+                  ))}
+                  </MapView>
+          ) : (
+            <Text>Obteniendo tu ubicación...</Text>
+        )}
             <View style={styles.buttonContainer}>
-                <Button title="Ir a mi ubicación" onPress={getLocation} />
+                <Button title="Ir a mi ubicación" onPress={getActualLocation} />
             </View>
         </View>
       );
@@ -138,6 +131,10 @@ const Map = () => {
       padding: 10,
       elevation: 3, // Añade sombra en Android
   },
+  PopUp: {
+    flex: 1,
+    width: '100%'
+},
 });
 
 export default Map;
