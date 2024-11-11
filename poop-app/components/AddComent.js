@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal } from 'react-native';
 import GradientButton from './GradientButton';
-import CustomDescriptionInput from './CustomDescriptionInput';
+import CustomDescriptionInput from './CommentDescriptionInput';
 
 
 
