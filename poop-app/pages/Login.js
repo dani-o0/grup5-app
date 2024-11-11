@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Image  } from 'react-native';
+import { React, useState } from 'react';
+import { View, StyleSheet, Image, Text  } from 'react-native';
 import GradientButton from '../components/GradientButton';
 import Input from '../components/CustomTextInput';
 import logo from '../assets/LogoLetrasB.png';
+import { FIREBASE_AUTH, FIREBASE_STORAGE } from '../firebaseConfig';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 
 export default function Login({ navigation }) {
     const [isLogin, setIsLogin] = useState(true);
@@ -12,13 +15,6 @@ export default function Login({ navigation }) {
 
     return (
     <View style={styles.container}>
-        <View style={styles.imageView}>
-            <Image
-                source={logo}
-                style={styles.image}
-                resizeMode="contain"
-            />
-        </View>
         <View style={styles.loginContainer}>
             <View style={styles.switchContainer}>
                 <GradientButton
@@ -73,17 +69,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 20,
         alignItems: 'center',
-    },
-    imageView: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '100%',
-        marginVertical: 20,
-    },
-    image: {
-        width: '50%',
-        height: undefined,
-        aspectRatio: 1,
     },
     switchContainer: {
         flexDirection: 'row',
