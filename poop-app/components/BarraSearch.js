@@ -1,13 +1,19 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'; 
+import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const SearchInput = ({ placeholder }) => {
   const [inputText, setInputText] = useState(''); 
 
+  // Función para manejar el cambio de texto en el input
   const handleTextChange = (text) => {
     setInputText(text);  
-    const textoGuardado = text;  // Aquí se guarda el texto ingresado
+  };
+
+  // Función que se llama al presionar el botón de búsqueda
+  const handleSearch = () => {
+    const textoGuardado = inputText;  // Guarda el texto actual
+    console.log("Texto buscado:", textoGuardado); // Esto es para provar, imprime el texto buscado
   };
 
   return (
@@ -15,11 +21,15 @@ const SearchInput = ({ placeholder }) => {
       <Icon name="search" size={24} color="#FFFFFF" style={styles.icon} /> 
       <TextInput
         style={styles.input}
-        placeholder={placeholder || "Search..."}  // Placeholder personalizado
-        value={inputText}          // Usa el valor del estado como valor del input
-        onChangeText={handleTextChange}  // Actualiza el estado cuando cambia el texto
+        placeholder={placeholder || "Search..."}
+        value={inputText}
+        onChangeText={handleTextChange}
         placeholderTextColor="#ccc"  
       />
+      
+      <TouchableOpacity onPress={handleSearch}>
+        <Icon name="arrow-forward" size={24} color="#FFFFFF" style={styles.iconSearch} /> 
+      </TouchableOpacity>
     </View>
   );
 };
@@ -27,23 +37,26 @@ const SearchInput = ({ placeholder }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    backgroundColor: '#3A354A',  // Color de fondo oscuro
-    borderRadius: 30,            // Bordes redondeados
-    paddingHorizontal: 15,       // Espacio a los lados
-    paddingVertical: 10,         // Espacio arriba y abajo
-    width: '90%',                // Ancho del componente (ajústalo según sea necesario)
+    backgroundColor: '#3A354A',
+    borderRadius: 30,
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    width: '90%',
     borderWidth: 1,
-    borderColor: '#56516A',      // Color del borde
-    alignItems: 'center',        // Alinea el icono verticalmente en el centro
+    borderColor: '#56516A',
+    alignItems: 'center',
   },
   icon: {
-    marginRight: 10,    // Espacio entre el ícono y el TextInput
+    marginRight: 10,
   },
   input: {
-    flex: 1,              // El input toma el espacio restante
-    color: '#fff',        // Color del texto
-    fontSize: 16,         // Tamaño de la fuente
-  }
+    flex: 1,
+    color: '#fff',
+    fontSize: 16,
+  },
+  iconSearch: {
+    marginLeft: 10, // Espacio entre el input y el botón de búsqueda
+  },
 });
 
 export default SearchInput;
