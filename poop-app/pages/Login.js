@@ -3,16 +3,46 @@ import { View, StyleSheet, Image, Text  } from 'react-native';
 import GradientButton from '../components/GradientButton';
 import Input from '../components/CustomTextInput';
 import logo from '../assets/LogoLetrasB.png';
-import { FIREBASE_AUTH } from '../firebaseConfig';
+import { FIREBASE_AUTH, FIREBASE_STORAGE } from '../firebaseConfig';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { ActivityIndicator } from 'react-native-web';
+import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
 
 
 export default function Login({ navigation }) {
     const [isLogin, setIsLogin] = useState(true);
+    const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const auth = FIREBASE_AUTH;
+    const firestore = FIREBASE_STORAGE;
+
+    const createUserInFirestore = async (user, displayName) => {
+        try {
+            const userRef = doc(firestore, 'Users', user.uid);
+
+            const docSnapShot = await getDoc(userRef);
+            if (!docSnapShot.exists()) {
+                await setDoc(userRef, {
+                    username: displayName,
+                    email: user.email,
+                    profilePicure: '',
+                });
+                console.log('Usuario creado en Firestore: ', users.uid);
+            }
+        } catch (error) {
+            console.error('Error al crear el usuario en Firestore: ', error.message);
+        }
+    };
+
+    const updateProfile = async (uid, newProfileData) => {
+        try {
+            const userRef = doc(firestore, 'Users', uid);
+            await updateDoc(userRed, newProfileData);
+            console.log('Informacion del usuario actualizada en Firestore: ', uid);
+        } catch (error) {
+            console.error('Error al actualizar la informacion del usuario en Firestore: ', error.message);
+        }
+    }
 
     const signIn = async () => {
         const cleanEmail = email.trim();
@@ -46,8 +76,8 @@ export default function Login({ navigation }) {
         const cleanPassword = password.trim();
         try {
             const response = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPassword);
+            createUserInFirestore(response.user, username);
             console.log(response);
-            alert('Mira tu email para completar el registro.');
         } catch (error) {
             switch (error.code) {
                 case 'auth/invalid-email':
@@ -107,6 +137,7 @@ export default function Login({ navigation }) {
                 </>
             ) : (
                 <>
+                    <Input placeholder="Nombre de usuario..." value={username} onChangeText={setUsername}/>
                     <Input placeholder="Correo..." value={email} onChangeText={setEmail}/>
                     <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword}/>
                     <Input placeholder="Confirmar contraseña..." secureTextEntry={true} />
