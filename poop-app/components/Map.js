@@ -84,6 +84,7 @@ if (loading) {
                             author: location.autor,
                             location: location.localizacion,
                             creationDate: location.fechaCreacion,
+                            comments: location.comentarios
                           })
                         }>
                           <LocationPopUp
