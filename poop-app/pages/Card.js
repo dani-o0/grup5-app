@@ -1,137 +1,58 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, FlatList } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 
 
 import Menu from '../components/Menu'
-import StaticRating from '../components/StaticRating';
 
 export default function Card({route}) {
-    const {name, imageURL, rating, description, author, location, creationDate, comments} = route.params;
+    const {name, imageURL, rating, description, author, location, creationDate} = route.params;
 
 
     //const formattedDate = creationDate?.toDate ? creationDate.toDate() : creationDate;
 
     // Formatear la fecha a una cadena legible, por ejemplo, con `toLocaleDateString`
     const displayDate = creationDate.toDate().toLocaleDateString()
-      
-    const renderItem = ({ item }) => (
-      <View style={styles.commentContainer}>
-        <Text style={styles.author}>{item.autor}</Text>
-        <Text style={styles.message}>{item.mensaje}</Text>
-        <Text style={styles.date}>Creado el día {item.fechaCreacion?.toDate ? item.fechaCreacion.toDate().toLocaleDateString() : new Date(item.fechaCreacion).toLocaleDateString()}</Text>
-      </View>
-    );
-    console.log('Comentarios:', comments);
 
     return (
-        <View style={styles.mainView}>
-        <View style={styles.tabView}>
+        <View style={styles.container}>
             <Image source={{uri: imageURL}} style={styles.image}/>
-            <Text style={styles.title}>{name}</Text>
-            <View style={styles.textContainer}>
-                <Text style={styles.text1}>{description}</Text>
-                <Text style={styles.text2}>Creado el dia {displayDate}</Text>
-            </View>
-            <StaticRating style={styles.rating} rating={rating}/>
-            <View style={{flex: 1}}>
-                <View style={styles.comentariosText}>
-                    <Text style={{color: 'white'}}>
-                        Comentarios:
-                    </Text>
-                    <FlatList
-                      data={comments}
-                      renderItem={renderItem}
-                      keyExtractor={item => item.id}
-                    />
-                </View>
-            </View>
+            <Text>{description}</Text>
+            <Text>Creado el dia {displayDate}</Text>
+            <Menu Active="Search"/>
         </View>
-        <Menu style={styles.menuView} currentSection={2} />
-      </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
-    mainView:
-    {
+    container: {
         flex: 1,
-        backgroundColor: '#151723',
-    },
-    tabView:
-    {
-        flex: 7,
-        width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-    menuView:
-    {
-        flex: 1,
-    },
-    title: {
-        color: 'white',
-        fontSize: 36,
+        backgroundColor: '#151723'
     },
     imageContainer: {
         flex:1,
-        width:'25%',
+        width:'20%',
         alignItems: 'center',
         justifyContent: 'center',
     },
     image: {
-        width: 300,
-        height: 250,
+        width: 100,
+        height: 100,
         borderRadius: 10, // Bordes redondeados en la imagen
-        marginTop:15
+        margin:15
     },
     textContainer: {
-        flex:1,
+        flex:2,
         justifyContent: 'center',
         alignItems: 'center',
-        width:'80%',
-        backgroundColor: '#56516A',
-        borderRadius: 20,
-        marginBottom: 10
+        width:'70%'
     },
-    text1: {
+    text: {
         color: 'white',
-        fontSize: 18,
-        marginBottom: 20,
+        fontSize: 20,
     },
-    text2: {
-        color: 'white',
-        fontSize: 12,
+    buttonContainer: {
+        width:'10%',
     },
-    rating: {
-        margin: 50,
-    },
-    comentariosText: {
-        flex: 1,
-        paddingHorizontal: 10,
-        width: '100%',
-        marginTop: 10
-    },
-    commentContainer: {
-        backgroundColor: '#56516A',
-        padding: 10,
-        paddingHorizontal: 50,
-        marginBottom: 10,
-        borderRadius: 10,
-    },
-    author: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-    message: {
-        color: 'white',
-        fontSize: 14,
-        marginTop: 5,
-    },
-    date: {
-        color: 'white',
-        fontSize: 12,
-        marginTop: 5,
-    },
-
 });

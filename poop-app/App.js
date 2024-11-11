@@ -36,7 +36,7 @@ export default function App() {
       setUser(user);
     });
     
-    return unsubscribe;
+    return unsubscribe; // Limpia el listener al desmontar el componente
   }, []);
 
   return (

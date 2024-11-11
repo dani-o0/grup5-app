@@ -50,8 +50,7 @@ export default function Search() {
                 description: item.descripcion,
                 author: item.autor,
                 location: item.localizacion,
-                creationDate: item.fechaCreacion,
-                comments: item.comentarios
+                creationDate: item.fechaCreacion
             })}
         />
     );
