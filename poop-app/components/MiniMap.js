@@ -8,7 +8,6 @@ const MiniMap = ({
   latitude = 37.78825,  // Latitud por defecto
   longitude = -122.4324,  // Longitud por defecto
   marker = true,  // Si queremos mostrar un marcador
-  markerComponent = null,  // Componente personalizado para el marcador
 }) => {
   // Estilos dinámicos para el mapa
   const mapStyle = {
@@ -20,17 +19,17 @@ const MiniMap = ({
   const renderMarker = () => {
     if (!marker) return null;
 
-    if (markerComponent) {
       // Si se pasa un componente como marcador
       return (
-        <Marker coordinate={{ latitude, longitude }}>
-          {markerComponent}
+        <Marker
+          key={0}
+          coordinate={{
+            latitude: latitude,
+            longitude: longitude,
+          }}
+        >
         </Marker>
-      );
-    }
-
-    // Si no se pasa un componente, no se renderiza el marcador
-    return null;
+      )
   };
 
   return (
