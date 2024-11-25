@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, StyleSheet, Image, Alert } from 'react-native';
 import GradientButton from '../components/GradientButton';
 import Input from '../components/CustomTextInput';
 import logo from '../assets/LogoLetrasB.png';
@@ -12,7 +12,7 @@ export default function Login({ navigation }) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoading, setIsLoading] = useState(false); // Estado de carga
+    const [isLoading, setIsLoading] = useState(false);
     const auth = FIREBASE_AUTH;
     const firestore = FIREBASE_STORAGE;
 
@@ -30,41 +30,66 @@ export default function Login({ navigation }) {
             }
         } catch (error) {
             console.error('Error al crear el usuario en Firestore:', error.message);
+            Alert.alert('Error', 'Hubo un problema al crear el usuario en Firestore');
         }
     };
 
     const signIn = async () => {
         const cleanEmail = email.trim();
         const cleanPassword = password.trim();
-        setIsLoading(true); // Activar carga
+        setIsLoading(true);
         try {
             const response = await signInWithEmailAndPassword(auth, cleanEmail, cleanPassword);
             console.log(response);
-            setTimeout(() => { // Simular un tiempo de carga
-                setIsLoading(false); 
-                navigation.replace('Home'); // Navegar al inicio (Home) después de iniciar sesión
+            setTimeout(() => {
+                setIsLoading(false);
+                navigation.replace('Home');
             }, 2000);
         } catch (error) {
-            setIsLoading(false); // Desactivar carga en caso de error
+            setIsLoading(false);
             console.error('Error durante el inicio de sesión:', error.message);
+            if (error.code === 'auth/invalid-email') {
+                Alert.alert('Error', 'El correo electrónico ingresado no es válido.');
+            } else if (error.code === 'auth/invalid-credential') {
+                Alert.alert('Error', 'La contraseña es incorrecta.');
+            } else if (error.code === 'auth/wrong-password') {
+                Alert.alert('Error', 'La contraseña es incorrecta.');
+            } else if (error.code === 'auth/user-not-found') {
+                Alert.alert('Error', 'No se encontró una cuenta con este correo electrónico.');
+            } else {
+                Alert.alert('Error', 'Hubo un problema durante el inicio de sesión. Intente nuevamente.');
+            }
+            // Regresar a la pantalla de login si hay error
+            navigation.navigate('Login');
         }
     };
 
     const signUp = async () => {
         const cleanEmail = email.trim();
         const cleanPassword = password.trim();
-        setIsLoading(true); // Activar carga
+        setIsLoading(true);
         try {
             const response = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPassword);
             createUserInFirestore(response.user, username);
             console.log(response);
-            setTimeout(() => { // Simular un tiempo de carga
+            setTimeout(() => {
                 setIsLoading(false);
-                navigation.replace('Home'); // Navegar al inicio (Home) después del registro
+                navigation.replace('Home');
             }, 2000);
         } catch (error) {
-            setIsLoading(false); // Desactivar carga en caso de error
+            setIsLoading(false);
             console.error('Error durante el registro:', error.message);
+            if (error.code === 'auth/invalid-email') {
+                Alert.alert('Error', 'El correo electrónico ingresado no es válido.');
+            } else if (error.code === 'auth/email-already-in-use') {
+                Alert.alert('Error', 'Este correo electrónico ya está registrado.');
+            } else if (error.code === 'auth/weak-password') {
+                Alert.alert('Error', 'La contraseña es demasiado débil. Debe tener al menos 6 caracteres.');
+            } else {
+                Alert.alert('Error', 'Hubo un problema durante el registro. Intente nuevamente.');
+            }
+            // Regresar a la pantalla de login si hay error
+            navigation.navigate('Login');
         }
     };
 
