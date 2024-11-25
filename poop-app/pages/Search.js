@@ -14,32 +14,42 @@ export default function Search() {
     const [searchText, setSearchText] = useState(''); // Texto ingresado en la barra de búsqueda
     const navigation = useNavigation();
 
-    // Función para obtener datos de Firestore
+    // Función para obtener los datos de Firestore
     const fetchData = async () => {
         try {
-            const querySnapshot = await getDocs(collection(FIREBASE_STORAGE, 'Lavabo'));
+            const querySnapshot = await getDocs(collection(FIREBASE_STORAGE, 'Lavabos'));
             const items = [];
             querySnapshot.forEach((doc) => {
-                items.push({ id: doc.id, ...doc.data() }); // Extrae los datos y agrega el id
+                items.push({ id: doc.id, ...doc.data() });
             });
-            setData(items); // Almacena los datos originales
-            setFilteredData(items); // Almacena también los datos iniciales como "filtrados"
-            setLoading(false); // Detener el indicador de carga
+            console.log(items);  // Imprime los datos obtenidos
+            setData(items);
+            setFilteredData(items); // Inicializa con todos los datos
+            setLoading(false);
         } catch (error) {
             console.error('Error obteniendo los datos de Firebase:', error);
         }
     };
 
+    // Llama a fetchData al montar el componente
     useEffect(() => {
         fetchData(); // Cargar datos cuando el componente se monta
     }, []);
 
+    // Función que se ejecuta cuando el texto de búsqueda cambia
+    const handleSearch = () => {
+        setLoading(true); // Mostrar indicador de carga
+        setSearchText('');
+        fetchData(); // Volver a obtener los datos al buscar
+    };
+
     // Función para filtrar datos en tiempo real
     useEffect(() => {
         const filteredItems = data.filter((item) =>
-            item.name.toLowerCase().includes(searchText.toLowerCase()) // Filtra por coincidencia parcial
+            item.name && item.name.toLowerCase().includes(searchText.toLowerCase()) // Asegúrate de que 'name' no sea undefined
         );
-        setFilteredData(filteredItems); // Actualiza los datos filtrados
+        setFilteredData(filteredItems);        
+        setLoading(false); // Detenemos el indicador de carga
     }, [searchText, data]); // Se ejecuta cuando cambia el texto de búsqueda o los datos originales
 
     // Muestra un indicador de carga mientras los datos se están obteniendo
@@ -74,17 +84,19 @@ export default function Search() {
     return (
         <View style={styles.mainView}>
             {/* Barra de búsqueda */}
-            <BarraSearch
-                placeholder="Buscar localización..."
-                onTextChange={(text) => setSearchText(text)} // Actualiza el texto de búsqueda
-            />
-
+            <View style={styles.searchView}>
+                <BarraSearch
+                    placeholder="Buscar localización..."
+                    onTextChange={setSearchText}
+                    handleSearch={handleSearch} // Actualiza el texto de búsqueda y ejecuta fetchData
+                />
+            </View>
             {/* Lista de localizaciones */}
             <FlatList
-                style={{ width: '90%' }}
-                data={filteredData} // Muestra solo las localizaciones filtradas
-                renderItem={renderItem} // Renderiza cada localización
-                keyExtractor={(item) => item.id} // Clave única para cada elemento
+                style={{ flex: 1 }}  // Asegúrate de que ocupe todo el espacio disponible
+                data={filteredData}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id}
             />
 
             {/* Menú inferior */}
@@ -97,6 +109,10 @@ const styles = StyleSheet.create({
     mainView: {
         flex: 1,
         backgroundColor: '#151723', // Fondo oscuro
+    },
+    searchView: {
+        alignItems: 'center',
+        padding: 10,
     },
     loadingContainer: {
         flex: 1,

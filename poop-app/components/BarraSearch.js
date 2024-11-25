@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const BarraSearch = ({ placeholder, onTextChange }) => {
+const BarraSearch = ({ placeholder, onTextChange, handleSearch }) => {
   const [inputText, setInputText] = useState(''); // Estado interno para el texto de búsqueda
 
   // Función para manejar el cambio de texto en el input
@@ -11,11 +11,6 @@ const BarraSearch = ({ placeholder, onTextChange }) => {
     if (onTextChange) {
       onTextChange(text); // Llama al callback proporcionado desde el componente padre
     }
-  };
-
-  // Función que se ejecuta al presionar el botón de búsqueda (puedes personalizarla)
-  const handleSearch = () => {
-    console.log('Texto buscado:', inputText); // Esto puede ser reemplazado con otra acción
   };
 
   return (
@@ -34,7 +29,7 @@ const BarraSearch = ({ placeholder, onTextChange }) => {
       
       {/* Botón de enviar búsqueda */}
       <TouchableOpacity onPress={handleSearch}>
-        <Icon name="arrow-forward" size={24} color="#FFFFFF" style={styles.iconSearch} />
+        <Icon name="refresh" size={24} color="#FFFFFF" style={styles.iconSearch} />
       </TouchableOpacity>
     </View>
   );
