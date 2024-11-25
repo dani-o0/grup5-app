@@ -6,13 +6,8 @@ import * as MediaLibrary from 'expo-media-library';
 
 const { width } = Dimensions.get('window');
 
-const AddImage = ({ placeholder }) => {
+const AddImage = ({ placeholder, onImageSelected }) => {
   const [selectedImage, setSelectedImage] = useState(placeholder);
-  const [status, requestPermission] = MediaLibrary.usePermissions();
-
-  if (status === null) {
-    requestPermission();
-  }
 
   const pickImageAsync = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -21,7 +16,9 @@ const AddImage = ({ placeholder }) => {
     });
 
     if (!result.canceled) {
-      setSelectedImage({ uri: result.assets[0].uri });
+      const imageUri = { uri: result.assets[0].uri };
+      setSelectedImage(imageUri);
+      onImageSelected(imageUri); // Notificar la imagen seleccionada
     } else {
       alert('You did not select any image.');
     }
@@ -41,6 +38,7 @@ const AddImage = ({ placeholder }) => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
