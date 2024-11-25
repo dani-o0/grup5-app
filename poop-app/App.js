@@ -8,6 +8,7 @@ import Add from './pages/Add';
 import UserPage from './pages/User';
 import Card from './pages/Card';
 import EditUser from './pages/EditUser';
+import SplashScreen from './pages/SplashScreen';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from './firebaseConfig';
 
@@ -45,7 +46,10 @@ export default function App() {
         {user ? (
           <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false, animation: 'none' }} />
         ) : (
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false, animation: 'none' }} />
+          <>
+            <Stack.Screen name="Login" component={Login} options={{ headerShown: false, animation: 'none' }} />
+            <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false, animation: 'none'}} />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,156 +1,116 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, Image, Text  } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Image } from 'react-native';
 import GradientButton from '../components/GradientButton';
 import Input from '../components/CustomTextInput';
 import logo from '../assets/LogoLetrasB.png';
 import { FIREBASE_AUTH, FIREBASE_STORAGE } from '../firebaseConfig';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
-
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 export default function Login({ navigation }) {
     const [isLogin, setIsLogin] = useState(true);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false); // Estado de carga
     const auth = FIREBASE_AUTH;
     const firestore = FIREBASE_STORAGE;
 
     const createUserInFirestore = async (user, displayName) => {
         try {
             const userRef = doc(firestore, 'Users', user.uid);
-
             const docSnapShot = await getDoc(userRef);
             if (!docSnapShot.exists()) {
                 await setDoc(userRef, {
                     username: displayName,
                     email: user.email,
-                    profilePicure: '',
+                    profilePicture: '',
                 });
-                console.log('Usuario creado en Firestore: ', users.uid);
+                console.log('Usuario creado en Firestore:', user.uid);
             }
         } catch (error) {
-            console.error('Error al crear el usuario en Firestore: ', error.message);
+            console.error('Error al crear el usuario en Firestore:', error.message);
         }
     };
-
-    const updateProfile = async (uid, newProfileData) => {
-        try {
-            const userRef = doc(firestore, 'Users', uid);
-            await updateDoc(userRed, newProfileData);
-            console.log('Informacion del usuario actualizada en Firestore: ', uid);
-        } catch (error) {
-            console.error('Error al actualizar la informacion del usuario en Firestore: ', error.message);
-        }
-    }
 
     const signIn = async () => {
         const cleanEmail = email.trim();
         const cleanPassword = password.trim();
+        setIsLoading(true); // Activar carga
         try {
             const response = await signInWithEmailAndPassword(auth, cleanEmail, cleanPassword);
             console.log(response);
+            setTimeout(() => { // Simular un tiempo de carga
+                setIsLoading(false); 
+                navigation.replace('Home'); // Navegar al inicio (Home) después de iniciar sesión
+            }, 2000);
         } catch (error) {
-            switch (error.code) {
-                case 'auth/invalid-email':
-                    console.error('El correo electrónico no es válido.');
-                    break;
-                case 'auth/user-disabled':
-                    console.error('La cuenta ha sido deshabilitada.');
-                    break;
-                case 'auth/user-not-found':
-                    console.error('No se encontró un usuario con este correo electrónico.');
-                    break;
-                case 'auth/wrong-password':
-                    console.error('La contraseña es incorrecta.');
-                    break;
-                default:
-                    console.error('Error desconocido durante el inicio de sesión:', error.message);
-                    break;
-            }
+            setIsLoading(false); // Desactivar carga en caso de error
+            console.error('Error durante el inicio de sesión:', error.message);
         }
-    }
+    };
 
     const signUp = async () => {
         const cleanEmail = email.trim();
         const cleanPassword = password.trim();
+        setIsLoading(true); // Activar carga
         try {
             const response = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPassword);
             createUserInFirestore(response.user, username);
             console.log(response);
+            setTimeout(() => { // Simular un tiempo de carga
+                setIsLoading(false);
+                navigation.replace('Home'); // Navegar al inicio (Home) después del registro
+            }, 2000);
         } catch (error) {
-            switch (error.code) {
-                case 'auth/invalid-email':
-                    alert('El correo electrónico no es válido.');
-                    console.error('El correo electrónico no es válido.');
-                    break;
-                case 'auth/email-already-in-use':
-                    alert('Este correo electrónico ya está en uso.');
-                    console.error('Este correo electrónico ya está en uso.');
-                    break;
-                case 'auth/weak-password':
-                    alert('La contraseña es demasiado débil.');
-                    alert('La contraseña es demasiado débil.');
-                    break;
-                default:
-                    alert('Error desconocido durante el registro:', error.message);
-                    console.error('Error desconocido durante el registro:', error.message);
-                    break;
-            }
+            setIsLoading(false); // Desactivar carga en caso de error
+            console.error('Error durante el registro:', error.message);
         }
+    };
+
+    // Mostrar SplashScreen si está cargando
+    if (isLoading) {
+        navigation.replace('SplashScreen');
+        return null;
     }
 
     return (
-    <View style={styles.container}>
-        <View style={styles.imageView}>
-            <Image
-                source={logo}
-                style={styles.image}
-                resizeMode="contain"
-            />
-        </View>
-        <View style={styles.loginContainer}>
-            <View style={styles.switchContainer}>
-                <GradientButton
-                    title="Login"
-                    onPress={() => setIsLogin(true)}
-                    isPrimary={isLogin}
-                    width="40%"
-                />
-                <GradientButton
-                    title="Sign Up"
-                    onPress={() => setIsLogin(false)}
-                    isPrimary={!isLogin}
-                    width="40%"
-                />
+        <View style={styles.container}>
+            <View style={styles.imageView}>
+                <Image source={logo} style={styles.image} resizeMode="contain" />
             </View>
-            {isLogin ? (
-                <>
-                    <Input placeholder="Correo electronico..." value={email} onChangeText={setEmail}/>
-                    <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword}/>
+            <View style={styles.loginContainer}>
+                <View style={styles.switchContainer}>
                     <GradientButton
-                        title={"Login"}
-                        onPress={signIn}
-                        isPrimary={true}
-                        width="100%"
+                        title="Login"
+                        onPress={() => setIsLogin(true)}
+                        isPrimary={isLogin}
+                        width="40%"
                     />
-                </>
-            ) : (
-                <>
-                    <Input placeholder="Nombre de usuario..." value={username} onChangeText={setUsername}/>
-                    <Input placeholder="Correo..." value={email} onChangeText={setEmail}/>
-                    <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword}/>
-                    <Input placeholder="Confirmar contraseña..." secureTextEntry={true} />
                     <GradientButton
-                        title={"Sign Up"}
-                        onPress={signUp}
-                        isPrimary={true}
-                        width="100%"
+                        title="Sign Up"
+                        onPress={() => setIsLogin(false)}
+                        isPrimary={!isLogin}
+                        width="40%"
                     />
-                </>
-            )}
+                </View>
+                {isLogin ? (
+                    <>
+                        <Input placeholder="Correo electrónico..." value={email} onChangeText={setEmail} />
+                        <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword} />
+                        <GradientButton title={"Login"} onPress={signIn} isPrimary={true} width="100%" />
+                    </>
+                ) : (
+                    <>
+                        <Input placeholder="Nombre de usuario..." value={username} onChangeText={setUsername} />
+                        <Input placeholder="Correo..." value={email} onChangeText={setEmail} />
+                        <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword} />
+                        <Input placeholder="Confirmar contraseña..." secureTextEntry={true} />
+                        <GradientButton title={"Sign Up"} onPress={signUp} isPrimary={true} width="100%" />
+                    </>
+                )}
+            </View>
         </View>
-    </View>
     );
 }
 
