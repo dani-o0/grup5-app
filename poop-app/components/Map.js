@@ -16,7 +16,7 @@ const Map = () => {
 
   const fetchLocations = async () => {
     try {
-        const querySnapshot = await getDocs(collection(FIREBASE_STORAGE, 'Lavabo')); // Asumiendo que tienes una colección 'questions'
+        const querySnapshot = await getDocs(collection(FIREBASE_STORAGE, 'Lavabos')); // Asumiendo que tienes una colección 'questions'
         const items = [];
         querySnapshot.forEach((doc) => {
             items.push({ id: doc.id, ...doc.data() }); // Extrae los datos y agrega el id
@@ -71,26 +71,26 @@ if (loading) {
                       <Marker
                         key={location.id}
                         coordinate={{
-                          latitude: location.localizacion.latitude,
-                          longitude: location.localizacion.longitude,
+                          latitude: location.location.latitude,
+                          longitude: location.location.longitude,
                         }}
                       >
                         <Callout tooltip onPress={() =>
                           navigation.navigate('Card', {
-                            name: location.nombre,
-                            imageURL: location.imagen,
-                            rating: location.valoracion,
+                            name: location.name,
+                            imageURL: location.imageUrl,
+                            rating: location.rating,
                             description: location.descripcion,
                             author: location.autor,
-                            location: location.localizacion,
+                            location: location.location,
                             creationDate: location.fechaCreacion,
                             comments: location.comentarios
                           })
                         }>
                           <LocationPopUp
-                            name={location.nombre}
-                            image={location.imagen}
-                            rating={location.valoracion}
+                            name={location.name}
+                            image={location.imageUrl}
+                            rating={location.rating}
                           />
                         </Callout>
                       </Marker>
