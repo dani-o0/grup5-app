@@ -8,8 +8,6 @@ import GradientButton from '../components/GradientButton';
 import PopUp from '../components/PopUp';
 import cat from '../assets/cat.jpg';
 import { FIREBASE_AUTH, FIREBASE_STORAGE } from '../firebaseConfig';
-import MiniMap from '../components/MiniMap';
-import testImage from '../assets/a.jpg';
 
 
 export default function User() {
@@ -32,17 +30,8 @@ export default function User() {
                         width="40%"
                     />
                 </View>
-                <TabButton title='Mis publicaciones' />
+                <TabButton title='Mis publicaciones' onPress={() => navigation.navigate('MyPublications')} />
                 <PopUp text="Log out" dialogText="¿Seguro que quieres cerrar sesión?" onAccept={() => FIREBASE_AUTH.signOut()} tab={true} />
-                <MiniMap
-                    size={{ width: 200, height: 200 }}  // Tamaño del mini mapa
-                    latitude={37.78825}  // Coordenada de latitud
-                    longitude={-122.4324}  // Coordenada de longitud
-                    marker={true}  // Mostrar marcador
-                    markerName={"Manolo"}
-                    markerImage={"https://pbs.twimg.com/media/FYs8yzgXoAMfXdO.jpg"}
-                    markerRating={5}
-                />
             </View>
             <Menu style={styles.menuView} currentSection={4} />
         </View>
