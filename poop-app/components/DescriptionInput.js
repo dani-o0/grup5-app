@@ -1,14 +1,16 @@
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
-const DescriptionInput = ({ placeholder, secondary }) => {
+const DescriptionInput = ({ placeholder, secondary, value, onChangeText }) => {
   return (
     <View style={[styles.container, { backgroundColor: secondary ? '#2E2942' : '#151723' }]}>
       <TextInput
         style={styles.input}
         placeholder={placeholder}
         placeholderTextColor="#808080"
-        multiline // Permite escribir en varias líneas
+        multiline
+        value={value}
+        onChangeText={onChangeText} // Prop para enviar el texto actualizado
       />
     </View>
   );
