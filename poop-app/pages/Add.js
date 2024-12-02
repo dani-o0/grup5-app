@@ -26,6 +26,7 @@ export default function Add() {
     const user = auth.currentUser;
 
 
+
     try {
       // Subir imagen a Firebase Storage
       const imageRef = ref(storage, `images/${user.uid}-${Date.now()}.jpg`);

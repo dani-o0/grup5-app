@@ -2,41 +2,37 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons'; // Usaremos Ionicons, pero puedes elegir cualquier set de iconos
 
-const Rating = () => {
-  const [rating, setRating] = useState(0); // Estado para manejar la calificación seleccionada
-  const [halfStar, setHalfStar] = useState(false); // Para saber si la última estrella es media
+const Rating = ({ onChange }) => {
+  const [rating, setRating] = useState(0);
+  const [halfStar, setHalfStar] = useState(false);
 
   const handleStarPress = (value) => {
+    let newRating;
     if (value === rating) {
+      // Alternar entre estrella completa y media estrella
       if (halfStar) {
-        // Si ya está media estrella, la llenamos completamente
         setHalfStar(false);
+        newRating = value; // Estrella completa
       } else {
-        // Si no hay media estrella, la ponemos
         setHalfStar(true);
+        newRating = value - 0.5; // Media estrella
       }
     } else {
-      // Si la estrella seleccionada es diferente a la actual, actualizamos la calificación y quitamos la media estrella
       setRating(value);
       setHalfStar(true);
+      newRating = value - 0.5; // Nueva selección comienza con media estrella
     }
+    onChange(newRating); // Enviar el valor actualizado
   };
 
   return (
     <View style={styles.container}>
-      {/* Generamos 5 estrellas */}
       {[1, 2, 3, 4, 5].map((star) => (
         <TouchableOpacity key={star} onPress={() => handleStarPress(star)}>
           <Icon
-            name={
-                star < rating || (star === rating && !halfStar)
-                  ? "star" // Estrella llena
-                  : star === rating && halfStar
-                  ? "star-half" // Media estrella
-                  : "star-outline" // Estrella vacía
-              }
+            name={star < rating || (star === rating && !halfStar) ? "star" : star === rating && halfStar ? "star-half" : "star-outline"}
             size={40}
-            color={star <= rating ? "#FFD700" : "#FFFFFF"} // Color dorado si está seleccionada, blanco si no
+            color="#FFD700"
           />
         </TouchableOpacity>
       ))}
