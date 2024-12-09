@@ -8,6 +8,8 @@ import Add from './pages/Add';
 import UserPage from './pages/User';
 import Card from './pages/Card';
 import EditUser from './pages/EditUser';
+import MyPublications from './pages/MyPublications';
+import SplashScreen from './pages/SplashScreen';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from './firebaseConfig';
 
@@ -23,6 +25,8 @@ function InsideLayout() {
       <InsideStack.Screen name="User" component={UserPage} options={{ headerShown: true, animation: 'none' }} />
       <InsideStack.Screen name="EditUser" component={EditUser} options={{ headerShown: true, animation: 'none' }} />
       <InsideStack.Screen name="Card" component={Card} options={{ headerShown: true, animation: 'none' }} />
+      <InsideStack.Screen name="MyPublications" component={MyPublications} options={{ headerShown: true, animation: 'none' }} />
+
     </InsideStack.Navigator>
   );
 }
@@ -36,7 +40,7 @@ export default function App() {
       setUser(user);
     });
     
-    return unsubscribe; // Limpia el listener al desmontar el componente
+    return unsubscribe;
   }, []);
 
   return (
@@ -45,7 +49,10 @@ export default function App() {
         {user ? (
           <Stack.Screen name="Inside" component={InsideLayout} options={{ headerShown: false, animation: 'none' }} />
         ) : (
-          <Stack.Screen name="Login" component={Login} options={{ headerShown: false, animation: 'none' }} />
+          <>
+            <Stack.Screen name="Login" component={Login} options={{ headerShown: false, animation: 'none' }} />
+            <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false, animation: 'none'}} />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>

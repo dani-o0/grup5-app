@@ -1,156 +1,141 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, Image, Text  } from 'react-native';
+import { View, StyleSheet, Image, Alert } from 'react-native';
 import GradientButton from '../components/GradientButton';
 import Input from '../components/CustomTextInput';
 import logo from '../assets/LogoLetrasB.png';
 import { FIREBASE_AUTH, FIREBASE_STORAGE } from '../firebaseConfig';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, setDoc, getDoc, updateDoc } from 'firebase/firestore';
-
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 export default function Login({ navigation }) {
     const [isLogin, setIsLogin] = useState(true);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const auth = FIREBASE_AUTH;
     const firestore = FIREBASE_STORAGE;
 
     const createUserInFirestore = async (user, displayName) => {
         try {
             const userRef = doc(firestore, 'Users', user.uid);
-
             const docSnapShot = await getDoc(userRef);
             if (!docSnapShot.exists()) {
                 await setDoc(userRef, {
                     username: displayName,
                     email: user.email,
-                    profilePicure: '',
+                    profilePicture: '',
                 });
-                console.log('Usuario creado en Firestore: ', users.uid);
+                console.log('Usuario creado en Firestore:', user.uid);
             }
         } catch (error) {
-            console.error('Error al crear el usuario en Firestore: ', error.message);
+            console.error('Error al crear el usuario en Firestore:', error.message);
+            Alert.alert('Error', 'Hubo un problema al crear el usuario en Firestore');
         }
     };
-
-    const updateProfile = async (uid, newProfileData) => {
-        try {
-            const userRef = doc(firestore, 'Users', uid);
-            await updateDoc(userRed, newProfileData);
-            console.log('Informacion del usuario actualizada en Firestore: ', uid);
-        } catch (error) {
-            console.error('Error al actualizar la informacion del usuario en Firestore: ', error.message);
-        }
-    }
 
     const signIn = async () => {
         const cleanEmail = email.trim();
         const cleanPassword = password.trim();
+        setIsLoading(true);
         try {
             const response = await signInWithEmailAndPassword(auth, cleanEmail, cleanPassword);
             console.log(response);
+            setTimeout(() => {
+                setIsLoading(false);
+                navigation.replace('Home');
+            }, 2000);
         } catch (error) {
-            switch (error.code) {
-                case 'auth/invalid-email':
-                    console.error('El correo electrónico no es válido.');
-                    break;
-                case 'auth/user-disabled':
-                    console.error('La cuenta ha sido deshabilitada.');
-                    break;
-                case 'auth/user-not-found':
-                    console.error('No se encontró un usuario con este correo electrónico.');
-                    break;
-                case 'auth/wrong-password':
-                    console.error('La contraseña es incorrecta.');
-                    break;
-                default:
-                    console.error('Error desconocido durante el inicio de sesión:', error.message);
-                    break;
+            setIsLoading(false);
+            console.error('Error durante el inicio de sesión:', error.message);
+            if (error.code === 'auth/invalid-email') {
+                Alert.alert('Error', 'El correo electrónico ingresado no es válido.');
+            } else if (error.code === 'auth/invalid-credential') {
+                Alert.alert('Error', 'La contraseña es incorrecta.');
+            } else if (error.code === 'auth/wrong-password') {
+                Alert.alert('Error', 'La contraseña es incorrecta.');
+            } else if (error.code === 'auth/user-not-found') {
+                Alert.alert('Error', 'No se encontró una cuenta con este correo electrónico.');
+            } else {
+                Alert.alert('Error', 'Hubo un problema durante el inicio de sesión. Intente nuevamente.');
             }
+            // Regresar a la pantalla de login si hay error
+            navigation.navigate('Login');
         }
-    }
+    };
 
     const signUp = async () => {
         const cleanEmail = email.trim();
         const cleanPassword = password.trim();
+        setIsLoading(true);
         try {
             const response = await createUserWithEmailAndPassword(auth, cleanEmail, cleanPassword);
             createUserInFirestore(response.user, username);
             console.log(response);
+            setTimeout(() => {
+                setIsLoading(false);
+                navigation.replace('Home');
+            }, 2000);
         } catch (error) {
-            switch (error.code) {
-                case 'auth/invalid-email':
-                    alert('El correo electrónico no es válido.');
-                    console.error('El correo electrónico no es válido.');
-                    break;
-                case 'auth/email-already-in-use':
-                    alert('Este correo electrónico ya está en uso.');
-                    console.error('Este correo electrónico ya está en uso.');
-                    break;
-                case 'auth/weak-password':
-                    alert('La contraseña es demasiado débil.');
-                    alert('La contraseña es demasiado débil.');
-                    break;
-                default:
-                    alert('Error desconocido durante el registro:', error.message);
-                    console.error('Error desconocido durante el registro:', error.message);
-                    break;
+            setIsLoading(false);
+            console.error('Error durante el registro:', error.message);
+            if (error.code === 'auth/invalid-email') {
+                Alert.alert('Error', 'El correo electrónico ingresado no es válido.');
+            } else if (error.code === 'auth/email-already-in-use') {
+                Alert.alert('Error', 'Este correo electrónico ya está registrado.');
+            } else if (error.code === 'auth/weak-password') {
+                Alert.alert('Error', 'La contraseña es demasiado débil. Debe tener al menos 6 caracteres.');
+            } else {
+                Alert.alert('Error', 'Hubo un problema durante el registro. Intente nuevamente.');
             }
+            // Regresar a la pantalla de login si hay error
+            navigation.navigate('Login');
         }
+    };
+
+    // Mostrar SplashScreen si está cargando
+    if (isLoading) {
+        navigation.replace('SplashScreen');
+        return null;
     }
 
     return (
-    <View style={styles.container}>
-        <View style={styles.imageView}>
-            <Image
-                source={logo}
-                style={styles.image}
-                resizeMode="contain"
-            />
-        </View>
-        <View style={styles.loginContainer}>
-            <View style={styles.switchContainer}>
-                <GradientButton
-                    title="Login"
-                    onPress={() => setIsLogin(true)}
-                    isPrimary={isLogin}
-                    width="40%"
-                />
-                <GradientButton
-                    title="Sign Up"
-                    onPress={() => setIsLogin(false)}
-                    isPrimary={!isLogin}
-                    width="40%"
-                />
+        <View style={styles.container}>
+            <View style={styles.imageView}>
+                <Image source={logo} style={styles.image} resizeMode="contain" />
             </View>
-            {isLogin ? (
-                <>
-                    <Input placeholder="Correo electronico..." value={email} onChangeText={setEmail}/>
-                    <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword}/>
+            <View style={styles.loginContainer}>
+                <View style={styles.switchContainer}>
                     <GradientButton
-                        title={"Login"}
-                        onPress={signIn}
-                        isPrimary={true}
-                        width="100%"
+                        title="Login"
+                        onPress={() => setIsLogin(true)}
+                        isPrimary={isLogin}
+                        width="40%"
                     />
-                </>
-            ) : (
-                <>
-                    <Input placeholder="Nombre de usuario..." value={username} onChangeText={setUsername}/>
-                    <Input placeholder="Correo..." value={email} onChangeText={setEmail}/>
-                    <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword}/>
-                    <Input placeholder="Confirmar contraseña..." secureTextEntry={true} />
                     <GradientButton
-                        title={"Sign Up"}
-                        onPress={signUp}
-                        isPrimary={true}
-                        width="100%"
+                        title="Sign Up"
+                        onPress={() => setIsLogin(false)}
+                        isPrimary={!isLogin}
+                        width="40%"
                     />
-                </>
-            )}
+                </View>
+                {isLogin ? (
+                    <>
+                        <Input placeholder="Correo electrónico..." value={email} onChangeText={setEmail} />
+                        <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword} />
+                        <GradientButton title={"Login"} onPress={signIn} isPrimary={true} width="100%" />
+                    </>
+                ) : (
+                    <>
+                        <Input placeholder="Nombre de usuario..." value={username} onChangeText={setUsername} />
+                        <Input placeholder="Correo..." value={email} onChangeText={setEmail} />
+                        <Input placeholder="Contraseña..." secureTextEntry={true} value={password} onChangeText={setPassword} />
+                        <Input placeholder="Confirmar contraseña..." secureTextEntry={true} />
+                        <GradientButton title={"Sign Up"} onPress={signUp} isPrimary={true} width="100%" />
+                    </>
+                )}
+            </View>
         </View>
-    </View>
     );
 }
 

@@ -9,6 +9,7 @@ import PopUp from '../components/PopUp';
 import cat from '../assets/cat.jpg';
 import { FIREBASE_AUTH, FIREBASE_STORAGE } from '../firebaseConfig';
 
+
 export default function User() {
     const navigation = useNavigation();
 
@@ -29,7 +30,7 @@ export default function User() {
                         width="40%"
                     />
                 </View>
-                <TabButton title='Mis publicaciones' />
+                <TabButton title='Mis publicaciones' onPress={() => navigation.navigate('MyPublications')} />
                 <PopUp text="Log out" dialogText="¿Seguro que quieres cerrar sesión?" onAccept={() => FIREBASE_AUTH.signOut()} tab={true} />
             </View>
             <Menu style={styles.menuView} currentSection={4} />
