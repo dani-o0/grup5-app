@@ -6,19 +6,18 @@ import Menu from '../components/Menu'
 import StaticRating from '../components/StaticRating';
 
 export default function Card({route}) {
-    const {name, imageURL, rating, description, author, location, creationDate, comments} = route.params;
+    const {name, imageURL, rating, description, author, location, creationDate, comments, commentAuthor} = route.params;
 
 
-    //const formattedDate = creationDate?.toDate ? creationDate.toDate() : creationDate;
 
     // Formatear la fecha a una cadena legible, por ejemplo, con `toLocaleDateString`
-    const displayDate = creationDate.toDate().toLocaleDateString()
+    const displayDate = creationDate?.toDate ? creationDate.toDate().toLocaleDateString() : new Date(creationDate).toLocaleDateString();
       
     const renderItem = ({ item }) => (
       <View style={styles.commentContainer}>
-        <Text style={styles.author}>{item.autor}</Text>
-        <Text style={styles.message}>{item.mensaje}</Text>
-        <Text style={styles.date}>Creado el día {item.fechaCreacion?.toDate ? item.fechaCreacion.toDate().toLocaleDateString() : new Date(item.fechaCreacion).toLocaleDateString()}</Text>
+        <Text style={styles.author}>{item.authorName || 'Anónimo'}</Text>
+        <Text style={styles.message}>{item.message}</Text>
+        <Text style={styles.date}>Creado el día {item.creationDate?.toDate ? item.creationDate.toDate().toLocaleDateString() : new Date(item.creationDate).toLocaleDateString()}</Text>
       </View>
     );
     console.log('Comentarios:', comments);
@@ -38,11 +37,15 @@ export default function Card({route}) {
                     <Text style={{color: 'white'}}>
                         Comentarios:
                     </Text>
-                    <FlatList
-                      data={comments}
-                      renderItem={renderItem}
-                      keyExtractor={item => item.id}
-                    />
+                    {comments?.length > 0 ? (
+                      <FlatList
+                        data={comments}
+                        renderItem={renderItem}
+                        keyExtractor={(item, index) => index.toString()}
+                      />
+                    ) : (
+                      <Text style={{ color: 'white', textAlign: 'center' }}>Sin comentarios.</Text>
+                    )}
                 </View>
             </View>
         </View>

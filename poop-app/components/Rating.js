@@ -7,15 +7,22 @@ const Rating = ({ onChange }) => {
   const [halfStar, setHalfStar] = useState(false);
 
   const handleStarPress = (value) => {
-    if (value === rating && halfStar) {
-      setHalfStar(false);
-    } else if (value === rating && !halfStar) {
-      setHalfStar(true);
+    let newRating;
+    if (value === rating) {
+      // Alternar entre estrella completa y media estrella
+      if (halfStar) {
+        setHalfStar(false);
+        newRating = value; // Estrella completa
+      } else {
+        setHalfStar(true);
+        newRating = value - 0.5; // Media estrella
+      }
     } else {
       setRating(value);
       setHalfStar(true);
+      newRating = value - 0.5; // Nueva selección comienza con media estrella
     }
-    onChange(halfStar ? value - 0.5 : value); // Enviar el valor actualizado
+    onChange(newRating); // Enviar el valor actualizado
   };
 
   return (

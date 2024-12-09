@@ -46,7 +46,7 @@ export default function Add() {
         location,
         imageUrl,
         userId: user.uid,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date(),
       };
 
       await addDoc(collection(firestore, 'Lavabos'), newPublication);
