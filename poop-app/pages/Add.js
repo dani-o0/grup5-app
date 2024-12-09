@@ -25,7 +25,10 @@ export default function Add() {
   const handleSubmit = async () => {
     const user = auth.currentUser;
 
-
+    if (!image || !name || !description || !location) {
+      Alert.alert("Error", "Debe completar todos los campos.");
+      return;
+    }
 
     try {
       // Subir imagen a Firebase Storage
