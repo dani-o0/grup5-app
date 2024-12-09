@@ -2,7 +2,7 @@ import React from 'react';
 import { View, StyleSheet, Text, Image, ActivityIndicator } from 'react-native';
 import logo from '../assets/LogoLetrasB.png';
 
-export default function Login({ navigation }) {
+export default function SplashScreen({ navigation }) {
     return (
         <View style={styles.container}>
             <View style={styles.imageView}>
