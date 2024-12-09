@@ -4,14 +4,14 @@ import StaticRating from './StaticRating';
 
 const LocationPopUp = ({ name, image, rating}) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.popUpContent}>
-        <Image source={{ uri: image }} style={styles.image} />
+      <Text> <Image style={{ height: 150, width:150 }} source={{uri: image }} resizeMode="cover" />  </Text>
         <Text style={styles.name}>{name}</Text>
         <StaticRating rating={rating} />
       </View>
       <View style={styles.triangle} />
-    </TouchableOpacity>
+    </View>
   );
 };
 
@@ -20,18 +20,14 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
+    flex: 1,
     backgroundColor: 'transparent', // Fondo transparente para el triángulo
   },
   popUpContent: {
     alignItems: 'center',
     backgroundColor: '#2C2C54',
-    borderRadius: 10,
+    borderRadius: 20,
     paddingBottom: 10,
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
   },
   name: {
     color: 'white',
