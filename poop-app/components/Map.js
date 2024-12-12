@@ -86,16 +86,15 @@ const Map = ({ isSelectable = false, onLocationSelect = () => {} }) => {
                 tooltip
                 onPress={() =>
                   navigation.navigate('Card', {
-                    name: location.name,
-                    imageURL: location.imageUrl,
-                    rating: location.rating,
-                    description: location.descripcion,
-                    author: location.autor,
-                    location: location.location,
-                    creationDate: location.fechaCreacion,
-                    comments: location.comentarios,
+                      name: location.name,
+                      imageURL: location.imageUrl,
+                      rating: location.rating,
+                      description: location.description,
+                      author: location.userId,
+                      location: location.location,
+                      creationDate: location.timestamp,
                   })
-                }
+              }
               >
                 <LocationPopUp
                   name={location.name}
