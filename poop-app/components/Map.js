@@ -16,17 +16,27 @@ const Map = ({ isSelectable = false, onLocationSelect = () => {} }) => {
 
   const fetchLocations = async () => {
     try {
-      const querySnapshot = await getDocs(collection(FIREBASE_STORAGE, 'Lavabos'));
-      const items = [];
-      querySnapshot.forEach((doc) => {
-        items.push({ id: doc.id, ...doc.data() });
-      });
-      setLocations(items);
-      setLoading(false);
+        const querySnapshot = await getDocs(collection(FIREBASE_STORAGE, 'Lavabos'));
+        const items = [];
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            const ratingsArray = data.rating || []; // Verifica que el campo exista y sea un array
+            const averageRating =
+                ratingsArray.length > 0
+                    ? ratingsArray.reduce((sum, rating) => sum + rating, 0) / ratingsArray.length
+                    : 0; // Calcula la media o asigna 0 si está vacío
+            items.push({
+                id: doc.id,
+                ...data,
+                averageRating, // Añade el promedio calculado como un nuevo campo
+            });
+        });
+        setLocations(items);
+        setLoading(false);
     } catch (error) {
-      console.error('Error obteniendo los datos de Firebase:', error);
+        console.error('Error obteniendo los datos de Firebase:', error);
     }
-  };
+};
 
   const getActualLocation = async () => {
     let { status } = await ActualLocation.requestForegroundPermissionsAsync();
@@ -86,21 +96,21 @@ const Map = ({ isSelectable = false, onLocationSelect = () => {} }) => {
                 tooltip
                 onPress={() =>
                   navigation.navigate('Card', {
-                    name: location.name,
-                    imageURL: location.imageUrl,
-                    rating: location.rating,
-                    description: location.descripcion,
-                    author: location.autor,
-                    location: location.location,
-                    creationDate: location.fechaCreacion,
-                    comments: location.comentarios,
+                      id : location.id,
+                      name: location.name,
+                      imageURL: location.imageUrl,
+                      rating: location.averageRating,
+                      description: location.description,
+                      author: location.userId,
+                      location: location.location,
+                      creationDate: location.timestamp,
                   })
-                }
+              }
               >
                 <LocationPopUp
                   name={location.name}
                   image={location.imageUrl}
-                  rating={location.rating}
+                  rating={location.averageRating}
                 />
               </Callout>
             </Marker>
@@ -130,7 +140,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     position: 'absolute',
-    top: 20,
+    top: 50,
     right: 20,
     zIndex: 1,
     backgroundColor: 'white',

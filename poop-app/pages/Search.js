@@ -20,9 +20,19 @@ export default function Search() {
             const querySnapshot = await getDocs(collection(FIREBASE_STORAGE, 'Lavabos'));
             const items = [];
             querySnapshot.forEach((doc) => {
-                items.push({ id: doc.id, ...doc.data() });
+                const data = doc.data();
+                const ratingsArray = data.rating || []; // Asegúrate de que el campo exista y sea un array
+                const averageRating =
+                    ratingsArray.length > 0
+                        ? ratingsArray.reduce((sum, rating) => sum + rating, 0) / ratingsArray.length
+                        : 0; // Calcula la media, o asigna 0 si el array está vacío
+                items.push({
+                    id: doc.id,
+                    ...data,
+                    averageRating, // Añade el promedio calculado como un nuevo campo
+                });
             });
-            console.log(items);  // Imprime los datos obtenidos
+            console.log(items); // Verifica los datos obtenidos
             setData(items);
             setFilteredData(items); // Inicializa con todos los datos
             setLoading(false);
@@ -66,12 +76,13 @@ export default function Search() {
         <Location
             name={item.name}
             imageURL={item.imageUrl}
-            rating={item.rating}
+            rating={item.averageRating} // Usa el promedio calculado
             onpress={() =>
                 navigation.navigate('Card', {
+                    id : item.id,
                     name: item.name,
                     imageURL: item.imageUrl,
-                    rating: item.rating,
+                    rating: item.averageRating,
                     description: item.description,
                     author: item.userId,
                     location: item.location,
@@ -111,6 +122,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#151723', // Fondo oscuro
     },
     searchView: {
+        marginTop: 50,
         alignItems: 'center',
         padding: 10,
     },
