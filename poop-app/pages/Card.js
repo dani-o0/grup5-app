@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, Modal} from 'react-native';
 
 
@@ -9,11 +9,19 @@ import Rating from '../components/Rating';
 import Input from '../components/CustomTextInput';
 import { flushSync } from 'react-dom';
 
-import { doc, updateDoc, getDoc } from 'firebase/firestore';
+import { getFirestore, doc, updateDoc, getDoc, collection, getDocs, query, orderBy   } from 'firebase/firestore';
 import { FIREBASE_STORAGE } from '../firebaseConfig';
+import { getAuth } from "firebase/auth";
 
 export default function Card({route}) {
-    const {id, name, imageURL, rating, description, author, location, creationDate, comments, commentAuthor} = route.params;
+    const {id, name, imageURL, rating, description, author, location, creationDate, commentAuthor} = route.params;
+
+    const auth = getAuth(); // Obtén el auth para el usuario actual
+    const user = auth.currentUser; // Usuario autenticado
+    if (!user) {
+        console.log("No hay usuario autenticado.");
+        return;
+    }
 
 
     const [newRatingState, setNewRatingState] = useState(false); // Estado para manejar si hay un nuevo comentario
@@ -21,33 +29,33 @@ export default function Card({route}) {
     const handleNewRating = () => {
         setNewRatingState(true); // Cambiar el estado de newComment a true
       };
-      const saveNewRating = async () => {
-        try {
-          // Referencia al documento específico en Firestore
-          const locationRef = doc(FIREBASE_STORAGE, 'Lavabos', id);
-      
-          // Obtener el documento
-          const docSnap = await getDoc(locationRef);
+    const saveNewRating = async () => {
+      try {
+        // Referencia al documento específico en Firestore
+        const locationRef = doc(FIREBASE_STORAGE, 'Lavabos', id);
+    
+        // Obtener el documento
+        const docSnap = await getDoc(locationRef);
+        
+        if (docSnap.exists()) {
+          // Obtener el array de calificaciones actual
+          const currentRatings = docSnap.data().rating || [];
           
-          if (docSnap.exists()) {
-            // Obtener el array de calificaciones actual
-            const currentRatings = docSnap.data().rating || [];
-            
-            // Agregar el nuevo rating al array
-            const updatedRatings = [...currentRatings, newRating];
-      
-            // Actualizar el documento con el nuevo array de calificaciones
-            await updateDoc(locationRef, {
-              rating: updatedRatings,
-            });
-      
-            console.log('Rating guardado exitosamente');
-          } else {
-            console.log('No se encontró el documento');
-          }
-        } catch (error) {
-          console.error('Error al guardar el rating:', error);
+          // Agregar el nuevo rating al array
+          const updatedRatings = [...currentRatings, newRating];
+    
+          // Actualizar el documento con el nuevo array de calificaciones
+          await updateDoc(locationRef, {
+            rating: updatedRatings,
+          });
+    
+          console.log('Rating guardado exitosamente');
+        } else {
+          console.log('No se encontró el documento');
         }
+      } catch (error) {
+        console.error('Error al guardar el rating:', error);
+      }
     }
       const handleAcceptRating = async () => {
         await saveNewRating(); // Guardar el nuevo rating en Firebase
@@ -63,6 +71,13 @@ export default function Card({route}) {
       const [newCommentState, setNewCommentState] = useState(false); // Estado para manejar si hay un nuevo comentario
       const [commentText, setCommentText] = useState(''); // Para almacenar el texto del comentario
 
+      const authorName = user.displayName || user.email; // Usa el displayName del usuario, si no está disponible, usa el email
+      const newComment = {
+        message: commentText,
+        authorName: authorName, // Puedes usar el nombre del usuario que hace el comentario
+        creationDate: new Date(), // Fecha actual
+      };
+
       const handleNewComment = () => {
         setNewCommentState(true); // Cambiar el estado de newComment a true
         if (!commentText.trim()) {
@@ -71,8 +86,37 @@ export default function Card({route}) {
         }
       };
 
+      const saveNewComment = async () => {
+        try {
+          // Referencia al documento específico en Firestore
+          const locationRef = doc(FIREBASE_STORAGE, 'Lavabos', id);
+      
+          // Obtener el documento
+          const docSnap = await getDoc(locationRef);
+          
+          if (docSnap.exists()) {
+            // Obtener los comentarios actuales
+            const currentComments = docSnap.data().comments || [];
+            
+            // Agregar el nuevo comentario al array
+            const updatedComments = [...currentComments, newComment];
+      
+            // Actualizar el documento con el nuevo array de comentarios
+            await updateDoc(locationRef, {
+              comments: updatedComments,
+            });
+      
+            console.log('Comentario guardado exitosamente');
+            setCommentText(''); // Limpiar el campo de texto
+          } else {
+            console.log('No se encontró el documento');
+          }
+        } catch (error) {
+          console.error('Error al guardar el comentario:', error);
+        }
+      }
       const handleAcceptComment = async () => {
-        // await saveNewComment(); // Guardar el nuevo rating en Firebase
+        await saveNewComment(); // Guardar el nuevo rating en Firebase
         setNewRatingState(false); // Cerrar el modal después de guardar
         console.log('ID del documento:', id);
         console.log('Nuevo comentario:', commentText);
@@ -83,7 +127,33 @@ export default function Card({route}) {
 
     // Formatear la fecha a una cadena legible, por ejemplo, con `toLocaleDateString`
     const displayDate = creationDate?.toDate ? creationDate.toDate().toLocaleDateString() : new Date(creationDate).toLocaleDateString();
-      
+
+    const [comments, setComments] = useState([]);
+
+    useEffect(() => {
+        fetchComments();
+    }, []);
+
+    const fetchComments = async () => {
+      try {
+        // Referencia al documento específico en Firestore
+        const locationRef = doc(FIREBASE_STORAGE, 'Lavabos', id);
+    
+        // Obtener el documento
+        const docSnap = await getDoc(locationRef);
+        
+        if (docSnap.exists()) {
+          // Obtener los comentarios actuales
+          const currentComments = docSnap.data().comments || [];
+          setComments(currentComments)
+        } else {
+          console.log('No se encontró el documento');
+        }
+      } catch (error) {
+        console.error('Error al guardar el comentario:', error);
+      }
+  };
+
     const renderItem = ({ item }) => (
       <View style={styles.commentContainer}>
         <Text style={styles.author}>{item.authorName || 'Anónimo'}</Text>
