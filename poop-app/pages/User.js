@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
+        marginTop: 50,
         marginVertical: 10, // Un poco de margen vertical para la imagen
     },
     image: {

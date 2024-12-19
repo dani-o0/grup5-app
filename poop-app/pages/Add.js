@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
   },
   scrollViewContent: {
     alignItems: 'center',
-    paddingVertical: 20,
+    marginTop: 20,
+    paddingVertical: 40,
     paddingHorizontal: 10,
   },
   menuView: {

@@ -19,13 +19,13 @@ const InsideStack = createNativeStackNavigator();
 function InsideLayout() {
   return (
     <InsideStack.Navigator>
-      <InsideStack.Screen name="Home" component={Home} options={{ headerShown: true, animation: 'none' }} />
-      <InsideStack.Screen name="Search" component={Search} options={{ headerShown: true, animation: 'none' }} />
-      <InsideStack.Screen name="Add" component={Add} options={{ headerShown: true, animation: 'none' }} />
-      <InsideStack.Screen name="User" component={UserPage} options={{ headerShown: true, animation: 'none' }} />
-      <InsideStack.Screen name="EditUser" component={EditUser} options={{ headerShown: true, animation: 'none' }} />
-      <InsideStack.Screen name="Card" component={Card} options={{ headerShown: true, animation: 'none' }} />
-      <InsideStack.Screen name="MyPublications" component={MyPublications} options={{ headerShown: true, animation: 'none' }} />
+      <InsideStack.Screen name="Home" component={Home} options={{ headerShown: false, animation: 'none' }} />
+      <InsideStack.Screen name="Search" component={Search} options={{ headerShown: false, animation: 'none' }} />
+      <InsideStack.Screen name="Add" component={Add} options={{ headerShown: false, animation: 'none' }} />
+      <InsideStack.Screen name="User" component={UserPage} options={{ headerShown: false, animation: 'none' }} />
+      <InsideStack.Screen name="EditUser" component={EditUser} options={{ headerShown: false, animation: 'none' }} />
+      <InsideStack.Screen name="Card" component={Card} options={{ headerShown: false, animation: 'none' }} />
+      <InsideStack.Screen name="MyPublications" component={MyPublications} options={{ headerShown: false, animation: 'none' }} />
 
     </InsideStack.Navigator>
   );
