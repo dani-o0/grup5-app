@@ -14,7 +14,7 @@ import { FIREBASE_AUTH, FIREBASE_STORAGE } from '../firebaseConfig';
 export default function Add() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState([]);
   const [location, setLocation] = useState(null);
   const [image, setImage] = useState(null);
 
@@ -53,7 +53,7 @@ export default function Add() {
       Alert.alert("Éxito", "Publicación subida correctamente.");
       setName('');
       setDescription('');
-      setRating(0);
+      setRating([]);
       setLocation(null);
       setImage(null);
     } catch (error) {
@@ -68,7 +68,7 @@ export default function Add() {
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <AddImage placeholder={require('../assets/addImage1.jpg')} onImageSelected={setImage} />
           <Input placeholder="Nombre..." secondary={true} value={name} onChangeText={setName} />
-          <Rating onChange={setRating} />
+          <Rating onChange={(newRating) => setRating([...rating, newRating])} />
           <View style={styles.mapContainer}>
             <Map isSelectable={true} onLocationSelect={setLocation} />
           </View>
