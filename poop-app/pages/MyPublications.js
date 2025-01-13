@@ -29,7 +29,17 @@ export default function MyPublications() {
                 const querySnapshot = await getDocs(locationsQuery);
                 const userLocations = [];
                 querySnapshot.forEach((doc) => {
-                    userLocations.push({ id: doc.id, ...doc.data() });
+                    const data = doc.data();
+                    const ratingsArray = data.rating || []; // Asegúrate de que el campo exista y sea un array
+                    const averageRating =
+                        ratingsArray.length > 0
+                            ? ratingsArray.reduce((sum, rating) => sum + rating, 0) / ratingsArray.length
+                            : 0; // Calcula la media, o asigna 0 si el array está vacío
+                    userLocations.push({
+                        id: doc.id,
+                        ...data,
+                        averageRating, // Añade el promedio calculado como un nuevo campo
+                    });
                 });
 
                 setLocations(userLocations); // Actualizar las localizaciones del usuario
@@ -63,7 +73,7 @@ export default function MyPublications() {
         <Location
             name={item.name}
             imageURL={item.imageUrl}
-            rating={item.rating}
+            rating={item.averageRating}
             onpress={() =>
                 navigation.navigate('Card', {
                     name: item.name,
