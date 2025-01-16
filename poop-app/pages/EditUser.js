@@ -26,22 +26,8 @@ export default function EditUser() {
     return (
         <View style={styles.mainView}>
             <View style={styles.tabView}>
-                <View style={styles.imageView}>
-                    <Image
-                        source={cat}
-                        style={styles.image}
-                    />
-                </View>
                 <View style={styles.buttonView}>
-                    <GradientButton
-                        title="Change profile picture"
-                        onPress={() => console.log("Change picture")}
-                        isPrimary={true}
-                        width="50%"
-                    />
                     <Input placeholder="Nombre de usuario..." value={displayName} onChangeText={setDisplayName} secondary={true}/>
-                    <Input placeholder="Contraseña..." secureTextEntry={true} secondary={true}/>
-                    <Input placeholder="Confirmar contraseña..." secureTextEntry={true} secondary={true} />
                     <GradientButton
                         title="Save changes"
                         onPress={() => updateProfile(FIREBASE_AUTH.currentUser.uid, {

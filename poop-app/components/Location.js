@@ -20,8 +20,10 @@ export default function Location({ name, imageURL, rating, onpress}) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'black',
+        backgroundColor: "#2E2942",
         borderRadius: 20,
+        borderColor: "#56516A",
+        borderWidth: 1,
         width:'100%',
         flex: 3,
         alignItems: 'center',
