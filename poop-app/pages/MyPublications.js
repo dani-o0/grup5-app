@@ -76,9 +76,10 @@ export default function MyPublications() {
             rating={item.averageRating}
             onpress={() =>
                 navigation.navigate('Card', {
+                    id: item.id,
                     name: item.name,
                     imageURL: item.imageUrl,
-                    rating: item.rating,
+                    rating: item.averageRating,
                     description: item.description,
                     author: item.userId,
                     location: item.location,
