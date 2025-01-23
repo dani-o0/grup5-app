@@ -12,6 +12,9 @@ import MyPublications from './pages/MyPublications';
 import SplashScreen from './pages/SplashScreen';
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from './firebaseConfig';
+import { LogBox } from 'react-native';
+
+LogBox.ignoreAllLogs();
 
 const Stack = createNativeStackNavigator();
 const InsideStack = createNativeStackNavigator();
