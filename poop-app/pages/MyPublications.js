@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     mainView: {
         flex: 1,
         backgroundColor: '#151723', // Fondo oscuro
+        paddingTop: 50,
     },
     loadingContainer: {
         flex: 1,
